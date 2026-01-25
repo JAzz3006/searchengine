@@ -11,3 +11,4 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 }
+//TODO: сделать правильную организацию структуры модели в БД - Liquibase создает, Hibernate проверяет (или отключен)

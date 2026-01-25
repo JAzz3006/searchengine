@@ -29,7 +29,7 @@ public class Site {
     @Column(name = "last_error", columnDefinition = "TEXT")
     private String lastError;
 
-    @Column(name = "url", nullable = false)
+    @Column(name = "url", nullable = false, unique = true)
     private String url;
 
     @Column(name = "name", nullable = false)

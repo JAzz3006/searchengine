@@ -4,6 +4,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -33,6 +34,9 @@ public class Lemma {
 
     @Column(name = "frequency", nullable = false)
     private Integer frequency;
+
+    @OneToMany(mappedBy = "lemma", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<PageLemma> pageLemmasOfLemma;
 
     @Override
     public boolean equals(Object o) {

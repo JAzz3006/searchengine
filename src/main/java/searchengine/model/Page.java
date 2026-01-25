@@ -3,6 +3,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -28,6 +29,9 @@ public class Page {
 
     @Column(name = "content", nullable = false, columnDefinition = "MEDIUMTEXT")
     private String content;
+
+    @OneToMany(mappedBy = "page", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<PageLemma> pageLemmasOfPage;
 
     @Override
     public boolean equals(Object o) {
