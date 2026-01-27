@@ -1,0 +1,52 @@
+<configuration>
+    <appender name = "CONSOLE" class = "ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d{HH:mm:ss}] %-5level [%logger{36}][%M] - %msg%n</pattern>
+        </encoder>
+        <!--<filter class = "ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter> -->
+    </appender>
+    <appender name = "FILE_MISC" class = "ch.qos.logback.core.FileAppender">
+        <file>logs/info_wan_err.log</file>
+        <append>false</append>
+        <filter class = "ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>NEUTRAL</onMismatch>
+        </filter>
+        <filter class = "ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>NEUTRAL</onMismatch>
+        </filter>
+        <filter class = "ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>[%d{HH:mm:ss}] %-5level [%logger{36}] - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name = "FILE_DEBUG" class = "ch.qos.logback.core.FileAppender">
+        <file>logs/debug.log</file>
+        <append>false</append>
+        <filter class = "ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>[%d{HH:mm:ss}] %-5level [%logger{36}] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref = "CONSOLE" />
+        <appender-ref ref = "FILE_MISC" />
+        <appender-ref ref = "FILE_DEBUG" />
+    </root>
+</configuration>
