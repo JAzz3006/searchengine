@@ -5,10 +5,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import searchengine.config.CrawlerConfig;
 import searchengine.crawler.htmlfetcher.PageLoader;
+import searchengine.crawler.utils.Normalisator;
+import searchengine.crawler.utils.Repairer;
+import searchengine.crawler.utils.RubbishFilter;
 import searchengine.model.Site;
+
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.RecursiveTask;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class CrawlerTask extends RecursiveTask<Void> {
@@ -59,7 +66,17 @@ public class CrawlerTask extends RecursiveTask<Void> {
             }
         }
 
+        //TODO: добавить нормализацию "старшей" url и добавление в visited
 
+        String cssQuery = "abs:href";
+        Set<String> children = doc.select("a[href]").stream()
+                .map(e -> e.attr(cssQuery))
+                .map(String::trim)
+                .filter(RubbishFilter::notRubbish)
+                .map(Repairer::repair)
+                .map(Normalisator::normalise)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
 
         return null;
     }
