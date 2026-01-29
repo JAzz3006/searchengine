@@ -6,37 +6,42 @@ import java.net.URISyntaxException;
 import java.util.Locale;
 
 public class Normalisator {
-
     public static final Logger log = LoggerFactory.getLogger(Normalisator.class);
 
     public static String normalise(String ref){
         if (ref == null) return null;
-        ref = ref.trim();
         if (ref.isEmpty()) return null;
 
-        StringBuilder builder = new StringBuilder();
         try{
             URI uri = new URI(ref);
-            String scheme = (uri.getScheme() == null ? "https" : uri.getScheme()).toLowerCase(Locale.ROOT);
+            String scheme = uri.getScheme();
             String host = uri.getHost();
-            if (host == null || host.isBlank()) {
-                log.warn("Ссылка без хоста отброшена: {}", ref);
+            if (scheme == null || host == null || host.isBlank()) {
                 return null;
             }
+
+            scheme = scheme.toLowerCase(Locale.ROOT);
+            host = host.toLowerCase(Locale.ROOT);
+
             int port = uri.getPort();
             String path = uri.getPath();
-            if (path == null) path = "";
-            if (path.length() > 1 && path.endsWith("/")){
+            if (path == null || path.isBlank()) path = "/";
+            if (path.length() > 1 && path.endsWith("/")) {
                 path = path.substring(0, path.length() - 1);
             }
 
-            builder.append(scheme).append("://").append(host);
+            String query = uri.getQuery();
 
-            if (port != -1 && port !=80 && port != 443) builder.append(":").append(port);
-            builder.append(path);
-            return builder.toString();
+            URI normalized = new URI(
+                    scheme,
+                    null,
+                    host, (port == 80 || port == 443) ? -1 : port,
+                    path,
+                    query,
+                    null
+            );
+            return normalized.toString();
         } catch (URISyntaxException e) {
-            log.warn("Битая ссылка: {}: {}",ref, e.getMessage());
             return null;
         }
     }

@@ -76,6 +76,8 @@ public class CrawlerTask extends RecursiveTask<Void> {
                 .map(Repairer::repair)
                 .map(Normalisator::normalise)
                 .filter(Objects::nonNull)
+                .map(Normalisator::normalise)
+
                 .collect(Collectors.toSet());
 
         return null;
