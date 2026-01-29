@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import searchengine.config.CrawlerConfig;
 import searchengine.crawler.htmlfetcher.PageLoader;
-import searchengine.crawler.utils.Normalisator;
+import searchengine.crawler.utils.Normalizer;
 import searchengine.crawler.utils.Repairer;
 import searchengine.crawler.utils.RubbishFilter;
 import searchengine.model.Site;
@@ -74,9 +74,9 @@ public class CrawlerTask extends RecursiveTask<Void> {
                 .map(String::trim)
                 .filter(RubbishFilter::notRubbish)
                 .map(Repairer::repair)
-                .map(Normalisator::normalise)
+                .map(Normalizer::normalise)
                 .filter(Objects::nonNull)
-                .map(Normalisator::normalise)
+                .map(Normalizer::normalise)
 
                 .collect(Collectors.toSet());
 
