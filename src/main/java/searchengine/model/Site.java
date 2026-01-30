@@ -3,8 +3,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
+import java.net.IDN;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 @Getter
@@ -40,4 +44,25 @@ public class Site {
 
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Lemma> lemmas = new HashSet<>();
+
+    @Transient
+    private String host;
+
+    public String getHost(){
+        if (host == null && url != null){
+            extractHost(url);
+        }
+        return host;
+    }
+
+    private static String extractHost(String url){
+        try{
+            URI uri = new URI(url);
+            String host = uri.getHost();
+            if (host == null) throw new IllegalArgumentException("Invalid site url: " + url);
+            return IDN.toASCII(host.toLowerCase(Locale.ROOT));
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException("Bad url " + url);
+        }
+    }
 }

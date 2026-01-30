@@ -9,7 +9,6 @@ import searchengine.crawler.utils.Normalizer;
 import searchengine.crawler.utils.Repairer;
 import searchengine.crawler.utils.RubbishFilter;
 import searchengine.model.Site;
-
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.RecursiveTask;
@@ -76,7 +75,6 @@ public class CrawlerTask extends RecursiveTask<Void> {
                 .map(Repairer::repair)
                 .map(Normalizer::normalise)
                 .filter(Objects::nonNull)
-                .map(Normalizer::normalise)
 
                 .collect(Collectors.toSet());
 

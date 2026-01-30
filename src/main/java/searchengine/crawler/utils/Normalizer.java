@@ -1,14 +1,15 @@
 package searchengine.crawler.utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import searchengine.config.CrawlerConfig;
+import java.net.IDN;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Normalizer {
-    public static final Logger log = LoggerFactory.getLogger(Normalizer.class);
+
     private static final Set<String> TRASH_PARAMS = Set.of(
             "utm_source", "utm_medium", "utm_campaign",
             "utm_term", "utm_content",
@@ -18,8 +19,7 @@ public class Normalizer {
     );
 
     public static String normalise(String ref){
-        if (ref == null) return null;
-        if (ref.isEmpty()) return null;
+        if (ref == null || ref.isBlank()) return null;
 
         try{
             URI uri = new URI(ref);
@@ -31,6 +31,7 @@ public class Normalizer {
 
             scheme = scheme.toLowerCase(Locale.ROOT);
             host = host.toLowerCase(Locale.ROOT);
+            host = IDN.toASCII(host);
 
             int port = uri.getPort();
             String path = uri.getPath();
@@ -39,7 +40,7 @@ public class Normalizer {
                 path = path.substring(0, path.length() - 1);
             }
 
-            String query = uri.getQuery();
+            String query = normalizeQuery(uri.getQuery()); // query нормализуется отдельно; null = query отброшена политикой
 
             URI normalized = new URI(
                     scheme,
@@ -59,14 +60,24 @@ public class Normalizer {
         if (rawQuery == null || rawQuery.isBlank()) return null;
 
         Map<String, List<String>> params = parseQuery(rawQuery);
+        params.entrySet().removeIf(e -> isTrashParam(e.getKey()));
 
-        return "___________";
+        if (params.isEmpty() || params.size() > CrawlerConfig.MAX_QUERY_PARAMS) {
+            return null;
+        }
+
+        return params.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(e -> e.getKey() + "=" + e.getValue().get(0))// берём первое значение параметра как каноническое
+                .collect(Collectors.joining("&"));
     }
 
-    public static void main(String[] args) {
-        String query = "key1=val1&ke2=val2&key1=val3&debyd&&wild=2";
-        Map<String, List<String>> map = parseQuery(query);
-        map.forEach((k, v) -> System.out.println(k + " - " + v));
+    private static boolean isTrashParam(String param){
+        if (param == null) return true;
+        if(param.length() >CrawlerConfig.MAX_QUERY_PARAM_LENGTH) return true;
+        String lower = param.toLowerCase(Locale.ROOT);
+        return TRASH_PARAMS.contains(lower)
+                || lower.startsWith("utm_");
     }
 
     // Парсим query в Map<key, values>, игнорируя параметры без значений
@@ -109,5 +120,4 @@ public class Normalizer {
             return s;
         }
     }
-
 }

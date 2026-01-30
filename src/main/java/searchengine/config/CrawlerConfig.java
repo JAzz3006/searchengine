@@ -18,5 +18,6 @@ public class CrawlerConfig {
     // будет ли приложение рассматривать поддомены как "тот же сайт". Например: (ria.ru и news.ria.ru)
     // например: true - поддомены относятся к тому же сайту и включаются в индекс
     public static final boolean SUBDOMAINS_ARE_INCLUDED = false;
-
+    public static final int MAX_QUERY_PARAMS = 5;
+    public static final int MAX_QUERY_PARAM_LENGTH = 100;
 }
