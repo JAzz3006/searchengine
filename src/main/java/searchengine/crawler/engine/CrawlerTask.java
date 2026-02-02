@@ -5,15 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import searchengine.config.CrawlerConfig;
 import searchengine.crawler.htmlfetcher.PageLoader;
-import searchengine.crawler.robots.ResolveRobotsRules;
+import searchengine.crawler.robots.RobotsRules;
 import searchengine.crawler.utils.BinaryFilter;
 import searchengine.crawler.utils.Normalizer;
 import searchengine.crawler.utils.Repairer;
 import searchengine.crawler.utils.RubbishFilter;
 import searchengine.model.Site;
-
-import java.nio.file.Paths;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.RecursiveTask;
@@ -34,7 +31,7 @@ public class CrawlerTask extends RecursiveTask<Void> {
     private final Site site;
     private final String url;
     private final int depth;
-    private final ResolveRobotsRules rules;
+    private final RobotsRules rules;
 
 
     @Override
@@ -72,8 +69,6 @@ public class CrawlerTask extends RecursiveTask<Void> {
             }
         }
 
-        List<String> forbidden = rules.buildRulesList(Paths.get(site.getUrl()));
-
         //TODO: добавить нормализацию "старшей" url и добавление в visited
 
         String cssQuery = "abs:href";
@@ -86,6 +81,7 @@ public class CrawlerTask extends RecursiveTask<Void> {
                 .filter(Objects::nonNull)
                 .filter(r -> sameHost(r, site))
                 .filter(BinaryFilter::isNotBinary)
+                .filter(rules::isAllowed)
 
                 .collect(Collectors.toSet());
 

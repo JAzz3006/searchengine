@@ -1,4 +1,5 @@
 package searchengine.crawler.robots;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
@@ -7,25 +8,28 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class ResolveRobotsRules {
-    private static Logger log = LoggerFactory.getLogger(ResolveRobotsRules.class);
+    private static final Logger log = LoggerFactory.getLogger(ResolveRobotsRules.class);
 
-    public boolean robotsTxtIsPresent(Path path){
-        return Files.exists(path) && !Files.isDirectory(path);
+    private final Path robotsPath;
+
+    public boolean robotsTxtIsPresent(){
+        return Files.exists(robotsPath) && !Files.isDirectory(robotsPath);
     }
 
-    public List<String> buildRulesList(Path path){
-        if (!robotsTxtIsPresent(path)){
+    public List<String> buildRulesList(){
+        if (!robotsTxtIsPresent()){
             log.info("Лист исключений не сформирован: файл {} не найден ",
-                    path);
-            return new ArrayList<>();
+                    robotsPath);
+            return List.of();
         }
         ArrayList<String> forbidden = new ArrayList<>();
-        List<String> lines = new ArrayList<>();
+        List<String> lines;
         try {
-            lines = Files.readAllLines(path);
+            lines = Files.readAllLines(robotsPath);
         } catch (IOException e) {
-            log.info("Лист исключений не сформирован - ошибка чтения файла {}: {}", path, e.getMessage());
+            log.info("Лист исключений не сформирован - ошибка чтения файла {}: {}", robotsPath, e.getMessage());
             return new ArrayList<>();
         }
         String pointer = "*";

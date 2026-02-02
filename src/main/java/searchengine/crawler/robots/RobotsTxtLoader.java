@@ -18,6 +18,7 @@ import java.nio.file.Path;
 @RequiredArgsConstructor
 public class RobotsTxtLoader {
     public static final Logger log = LoggerFactory.getLogger(RobotsTxtLoader.class);
+
     private final ResolveRobotsPath resolveRobotsPath;
 
     public void getRobotsSaved(Site site) {
