@@ -16,7 +16,7 @@ public class StartupInitializer {
     @PostConstruct
     public void init(){
         checkDir("logs");
-        checkDir("output");
+        checkDir(CrawlerConfig.OUTPUT_PATH);
     }
 
     public void checkDir(String name){
