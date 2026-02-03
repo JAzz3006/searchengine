@@ -1,4 +1,5 @@
 package searchengine.crawler.htmlfetcher;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
