@@ -68,7 +68,12 @@ public class CrawlerTask extends RecursiveAction {
             }
         }
 
-        context.addPage(new CrawledPage(site, url, response.statusCode(), doc.html()));
+        context.enqueue(new CrawledPage(
+                site,
+                url,
+                response.statusCode(),
+                doc.html())
+        );
 
         Set<String> children = doc.select("a[href]").stream()
                 .map(e -> e.attr("abs:href"))

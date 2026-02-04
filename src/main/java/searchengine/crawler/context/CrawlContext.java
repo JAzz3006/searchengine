@@ -2,33 +2,40 @@ package searchengine.crawler.context;
 import lombok.Getter;
 import searchengine.config.CrawlerConfig;
 import searchengine.crawler.robots.RobotsRules;
-import searchengine.services.page.PageService;
-
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
 public class CrawlContext {
 
-    private final Queue<CrawledPage> pageBuffer = new ConcurrentLinkedQueue<>();
+    private final Queue<CrawledPage> queue = new ConcurrentLinkedQueue<>();
     private final Set<String> visited = ConcurrentHashMap.newKeySet();
+    private final AtomicBoolean crawlingFinished = new AtomicBoolean(false);
+
     private final RobotsRules rules;
-    private final PageService pageService;
     AtomicInteger budget;
     Semaphore throttle;
 
-    public CrawlContext(RobotsRules rules, PageService pageService) {
+    public CrawlContext(RobotsRules rules) {
         this.rules = rules;
-        this.pageService = pageService;
         this.budget = new AtomicInteger(CrawlerConfig.MAX_PAGES_BUDGET);
         this.throttle = new Semaphore(CrawlerConfig.MAX_CONCURRENT_REQUESTS);
     }
 
-    public void addPage(CrawledPage crawledPage) {
-        pageBuffer.add(crawledPage);
+    public void enqueue(CrawledPage crawledPage) {
+        queue.offer(crawledPage);
+    }
+
+    public void finish() {
+        crawlingFinished.set(true);
+    }
+
+    public boolean isFinished() {
+        return crawlingFinished.get();
     }
 }
