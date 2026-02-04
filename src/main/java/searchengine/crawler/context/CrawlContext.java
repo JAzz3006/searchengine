@@ -3,14 +3,18 @@ import lombok.Getter;
 import searchengine.config.CrawlerConfig;
 import searchengine.crawler.robots.RobotsRules;
 import searchengine.services.page.PageService;
+
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
 public class CrawlContext {
 
+    private final Queue<CrawledPage> pageBuffer = new ConcurrentLinkedQueue<>();
     private final Set<String> visited = ConcurrentHashMap.newKeySet();
     private final RobotsRules rules;
     private final PageService pageService;
@@ -24,8 +28,7 @@ public class CrawlContext {
         this.throttle = new Semaphore(CrawlerConfig.MAX_CONCURRENT_REQUESTS);
     }
 
-
-
-
-
+    public void addPage(CrawledPage crawledPage) {
+        pageBuffer.add(crawledPage);
+    }
 }

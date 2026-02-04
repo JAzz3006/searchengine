@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import searchengine.config.CrawlerConfig;
 import searchengine.crawler.context.CrawlContext;
+import searchengine.crawler.context.CrawledPage;
 import searchengine.crawler.htmlfetcher.PageLoader;
 import searchengine.crawler.utils.BinaryFilter;
 import searchengine.crawler.utils.Normalizer;
@@ -67,7 +68,7 @@ public class CrawlerTask extends RecursiveAction {
             }
         }
 
-        context.getPageService().savePage(response.statusCode(), site, url, doc);
+        context.addPage(new CrawledPage(site, url, response.statusCode(), doc.html()));
 
         Set<String> children = doc.select("a[href]").stream()
                 .map(e -> e.attr("abs:href"))
