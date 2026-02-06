@@ -56,6 +56,7 @@ public class PageBatchWriter implements Runnable{
         page.setPath(crawledPage.getUrl());
         page.setSite(crawledPage.getSite());
         page.setContent(crawledPage.getContent());
+        page.setCode(crawledPage.getStatusCode());
         return page;
     }
 }

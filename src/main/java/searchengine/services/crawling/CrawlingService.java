@@ -38,8 +38,8 @@ public class CrawlingService {
     private final PageRepository pageRepository;
     private final BatchConfig batchConfig;
 
-    public void crawl(Site site){
-
+    public void crawl(Site site) {
+        log.info("host = {}", site.getHost());
         robotsTxtLoader.getRobotsSaved(site);
         Path robotsPath = resolveRobotsPath.resolve(site);
         ResolveRobotsRules resolver = new ResolveRobotsRules(robotsPath);
@@ -61,7 +61,7 @@ public class CrawlingService {
 //                .findFirst()
 //                .orElse(null);
 
-        if (mainUrlNormalised == null){
+        if (mainUrlNormalised == null) {
             log.warn("Root URL rejected after normalization: {}", site.getUrl());
             return;
         }
@@ -69,6 +69,9 @@ public class CrawlingService {
         if (!context.getVisited().add(mainUrlNormalised)) {
             log.debug("Root URL already visited: {}", mainUrlNormalised);
         }
+//        CrawlerTask task = new CrawlerTask(site, mainUrlNormalised, 0, context);
+//        task.runDirect();
+
         PageBatchWriter pageBatchWriter = new PageBatchWriter(context,pageRepository,batchConfig);
         ExecutorService writerExecutor = Executors.newSingleThreadExecutor();
         writerExecutor.submit(pageBatchWriter);

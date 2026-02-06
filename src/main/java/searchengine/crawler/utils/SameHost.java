@@ -24,4 +24,16 @@ public class SameHost {
             return false;
         }
     }
+
+    public static boolean preSameHost(String ref, String siteHost) {
+        if (ref == null) return false;
+        String lower = ref.toLowerCase(Locale.ROOT);
+        String host = siteHost.toLowerCase(Locale.ROOT);
+
+        if (lower.startsWith("http://") || lower.startsWith("https://")) {
+            return lower.startsWith("http://" + host)
+                    || lower.startsWith("https://" + host);
+        }
+        return true;
+    }
 }

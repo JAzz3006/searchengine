@@ -30,5 +30,4 @@ public class PageLemma {
 
     @Column(name = "rank_value", nullable = false)
     private float rank;
-
 }

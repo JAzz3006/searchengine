@@ -16,6 +16,8 @@ import searchengine.model.Site;
 import java.util.*;
 import java.util.concurrent.RecursiveAction;
 import java.util.stream.Collectors;
+
+import static searchengine.crawler.utils.SameHost.preSameHost;
 import static searchengine.crawler.utils.SameHost.sameHost;
 
 @RequiredArgsConstructor
@@ -79,6 +81,7 @@ public class CrawlerTask extends RecursiveAction {
                 .map(e -> e.attr("abs:href"))
                 .map(String::trim)
                 .filter(RubbishFilter::notRubbish)
+                .filter(s -> preSameHost(s, site.getHost()))
                 .map(Repairer::repair)
                 .map(Normalizer::normalise)
                 .filter(Objects::nonNull)
@@ -89,6 +92,13 @@ public class CrawlerTask extends RecursiveAction {
                 .collect(Collectors.toSet());
 
         List<CrawlerTask> tasks = new ArrayList<>();
+
+//        log.info("печатаем children по {}", site.getHost());
+//        for (String s : children){
+//            log.info(s);
+//        }
+//        log.info("кончили печатать children по {}", site.getHost());
+
 
         Iterator<String> iterator = children.iterator();
         while (iterator.hasNext()) {
@@ -106,4 +116,8 @@ public class CrawlerTask extends RecursiveAction {
             task.join();
         }
     }
+//    public void runDirect(){
+//        compute();
+//    }
+
 }

@@ -50,7 +50,7 @@ public class Site {
 
     public String getHost(){
         if (host == null && url != null){
-            extractHost(url);
+            host = extractHost(url);
         }
         return host;
     }

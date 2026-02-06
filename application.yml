@@ -26,3 +26,12 @@ batch:
   page-flush-interval-ms: 2000
   lemma-size: 500
   lemma-flush-interval-ms: 1000
+
+logging:
+  level:
+    root: DEBUG
+    org.springframework: WARN
+    org.hibernate: WARN
+    org.hibernate.SQL: OFF
+    org.hibernate.type: OFF
+    searchengine: DEBUG

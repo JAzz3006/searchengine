@@ -37,13 +37,29 @@ public class IndexingServiceImpl implements IndexingService {
     private void indexSite(SiteConfig siteConfig){
         siteService.deleteByUrl(siteConfig.getUrl());
         Site site = siteService.createIndexingSite(
-                siteConfig.getUrl(),
+                ensureScheme(siteConfig.getUrl()),
                 siteConfig.getName());
         crawlingService.crawl(site);
+    }
+
+    public void indexPage(String url){
+
     }
 
     @Override
     public boolean stopIndexing() {
         return false;
+    }
+
+    public static String ensureScheme(String rawUrl) {
+        if (rawUrl == null) return null;
+
+        String url = rawUrl.trim();
+        if (url.isEmpty()) return null;
+
+        if (!url.matches("^[a-zA-Z][a-zA-Z0-9+.-]*://.*")) {
+            return "https://" + url;
+        }
+        return url;
     }
 }
