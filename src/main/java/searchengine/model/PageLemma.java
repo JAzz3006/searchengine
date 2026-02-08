@@ -13,7 +13,8 @@ import javax.persistence.*;
 @Table(name = "page_lemma", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"page_id", "lemma_id"})
 })
-public class PageLemma {
+public class
+PageLemma {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,13 +2,20 @@ package searchengine.services.page;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 import searchengine.config.BatchConfig;
 import searchengine.crawler.context.CrawlContext;
 import searchengine.crawler.context.CrawledPage;
+import searchengine.model.Lemma;
 import searchengine.model.Page;
+import searchengine.model.PageLemma;
+import searchengine.repositories.LemmaRepository;
+import searchengine.repositories.PageLemmaRepository;
 import searchengine.repositories.PageRepository;
+import searchengine.services.lemma.LemmaService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 public class PageBatchWriter implements Runnable{
@@ -17,8 +24,13 @@ public class PageBatchWriter implements Runnable{
     private final CrawlContext context;
     private final PageRepository pageRepository;
     private final BatchConfig batchConfig;
+    private final PageContentExtractor extractor;
+    private  final LemmaService lemmaService;
+    private final LemmaRepository lemmaRepository;
+    private final PageLemmaRepository pageLemmaRepository;
 
-    private long lastFlushTime = System.currentTimeMillis();
+    private long pageLastFlushTime = System.currentTimeMillis();
+    private long lemmaLastFlushTime = System.currentTimeMillis();
 
     @Override
     public void run() {
@@ -27,28 +39,86 @@ public class PageBatchWriter implements Runnable{
         List<Page> batch = new ArrayList<>(batchConfig.getPageSize());
         while (!context.isFinished() || !context.getQueue().isEmpty()){
             CrawledPage dto = context.getQueue().poll();
-            if (dto != null){
-                batch.add(mapToEntity(dto));
+            if (dto == null){
+                sleepShort();
+                continue;
             }
-            if (batch.size() >= batchConfig.getPageSize() || flushTimeout()){
-                flush(batch);
+            if (dto.getStatusCode() >= 400){
+                continue;
+            }
+
+            try {
+                String text = extractor.textExtractor(dto.getContent());
+                Map<String, Integer> lemmas = lemmaService.collectLemmas(text);
+                Page page = mapToEntity(dto);
+                batch.add(page);
+
+                if (batch.size() >= batchConfig.getPageSize() || pageFlushTimeout()) {
+                    pageFlush(batch);
+                }
+                saveIndex(page, lemmas);
+            }catch (Exception e){
+                log.error("Indexing failed for page {} : {}", dto.getUrl(), e.getMessage());
             }
         }
-        flush(batch);
-
+        pageFlush(batch);
         log.info("PageBatchWriter finished");
     }
 
-    private void flush(List<Page> batch){
+    private void pageFlush(List<Page> batch){
         if (batch.isEmpty()) return;
         pageRepository.saveAll(batch);
         batch.clear();
-        lastFlushTime = System.currentTimeMillis();
+        pageLastFlushTime = System.currentTimeMillis();
     }
 
-    private boolean flushTimeout(){
+    private void lemmaFlush(List<Lemma> lemmaBatch){
+        if (lemmaBatch.isEmpty()) return;
+        lemmaRepository.saveAll(lemmaBatch);
+        lemmaBatch.clear();
+        lemmaLastFlushTime = System.currentTimeMillis();
+    }
+
+
+    @Transactional
+    private void saveIndex(Page page, Map<String, Integer> lemmas){
+        for (Map.Entry<String, Integer> entry : lemmas.entrySet()){
+            Lemma lemma = lemmaRepository.findByLemmaAndSite(entry.getKey(), page.getSite());
+
+            if (lemma == null) {
+                lemma = new Lemma();
+                lemma.setSite(page.getSite());
+                lemma.setLemma(entry.getKey());
+                lemma.setFrequency(0);
+            }
+
+            lemma.setFrequency(lemma.getFrequency() + 1);
+            lemmaRepository.save(lemma);
+
+            PageLemma pageLemma = new PageLemma();
+            pageLemma.setPage(page);
+            pageLemma.setLemma(lemma);
+            pageLemma.setRank(entry.getValue());
+            pageLemmaRepository.save(pageLemma);
+        }
+    }
+
+    private boolean pageFlushTimeout(){
         long now = System.currentTimeMillis();
-        return now - lastFlushTime >= batchConfig.getPageFlushIntervalMs();
+        return now - pageLastFlushTime >= batchConfig.getPageFlushIntervalMs();
+    }
+
+    private boolean lemmaFlushTimeout(){
+        long now = System.currentTimeMillis();
+        return now - lemmaLastFlushTime >= batchConfig.getLemmaFlushIntervalMs();
+    }
+
+    private void sleepShort(){
+        try{
+            Thread.sleep(10);
+        }catch (InterruptedException e){
+            Thread.currentThread().interrupt();
+        }
     }
 
     private Page mapToEntity(CrawledPage crawledPage){

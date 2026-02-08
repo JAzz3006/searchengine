@@ -15,8 +15,12 @@ import searchengine.crawler.utils.Normalizer;
 import searchengine.crawler.utils.Repairer;
 import searchengine.crawler.utils.RubbishFilter;
 import searchengine.model.Site;
+import searchengine.repositories.LemmaRepository;
+import searchengine.repositories.PageLemmaRepository;
 import searchengine.repositories.PageRepository;
+import searchengine.services.lemma.LemmaService;
 import searchengine.services.page.PageBatchWriter;
+import searchengine.services.page.PageContentExtractor;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -37,6 +41,10 @@ public class CrawlingService {
     private final ResolveRobotsPath resolveRobotsPath;
     private final PageRepository pageRepository;
     private final BatchConfig batchConfig;
+    private final PageContentExtractor extractor;
+    private final LemmaService lemmaService;
+    private final LemmaRepository lemmaRepository;
+    private final PageLemmaRepository pageLemmaRepository;
 
     public void crawl(Site site) {
         log.info("host = {}", site.getHost());
@@ -46,7 +54,6 @@ public class CrawlingService {
         List<String> forbidden = resolver.buildRulesList();
         RobotsRules rules = new RobotsRules(forbidden);
         CrawlContext context = new CrawlContext(rules);
-
 
         String mainUrlNormalised = Normalizer.normalise(site.getUrl());
 //        String mainUrlNormalised = Stream.of(site.getUrl())
@@ -69,10 +76,15 @@ public class CrawlingService {
         if (!context.getVisited().add(mainUrlNormalised)) {
             log.debug("Root URL already visited: {}", mainUrlNormalised);
         }
-//        CrawlerTask task = new CrawlerTask(site, mainUrlNormalised, 0, context);
-//        task.runDirect();
 
-        PageBatchWriter pageBatchWriter = new PageBatchWriter(context,pageRepository,batchConfig);
+        PageBatchWriter pageBatchWriter = new PageBatchWriter(
+                context,
+                pageRepository,
+                batchConfig,
+                extractor,
+                lemmaService,
+                lemmaRepository,
+                pageLemmaRepository);
         ExecutorService writerExecutor = Executors.newSingleThreadExecutor();
         writerExecutor.submit(pageBatchWriter);
 
