@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import searchengine.config.CrawlerConfig;
 import searchengine.crawler.context.CrawlContext;
 import searchengine.crawler.context.CrawledPage;
+import searchengine.crawler.htmlfetcher.LoadedPage;
 import searchengine.crawler.htmlfetcher.PageLoader;
 import searchengine.crawler.utils.BinaryFilter;
 import searchengine.crawler.utils.Normalizer;
@@ -16,7 +17,6 @@ import searchengine.model.Site;
 import java.util.*;
 import java.util.concurrent.RecursiveAction;
 import java.util.stream.Collectors;
-
 import static searchengine.crawler.utils.SameHost.preSameHost;
 import static searchengine.crawler.utils.SameHost.sameHost;
 
@@ -26,12 +26,12 @@ public class CrawlerTask extends RecursiveAction {
 
     private static final int REQUEST_DELAY_MS = CrawlerConfig.REQUEST_DELAY_MS;
     private static final int MAX_DEPTH = CrawlerConfig.MAX_DEPTH;
-    private final PageLoader loader = new PageLoader();
 
     private final Site site;
     private final String url;
     private final int depth;
     private final CrawlContext context;
+    private final PageLoader pageLoader;
 
     @Override
     protected void compute() {
@@ -47,12 +47,14 @@ public class CrawlerTask extends RecursiveAction {
         }
         Document doc;
         Connection.Response response;
+        LoadedPage loadedPage;
         boolean acquired = false;
         try {
             context.getThrottle().acquire();
             acquired = true;
-            response = loader.getResponse(url);
-            doc = loader.getDocument(url);
+
+            loadedPage = pageLoader.load(url);
+            doc = loadedPage.getDoc();
             if (doc == null) {
                 log.info("Что-то пошло не так при загрузке по адресу: {}", url);
                 return;
@@ -73,7 +75,7 @@ public class CrawlerTask extends RecursiveAction {
         context.enqueue(new CrawledPage(
                 site,
                 url,
-                response.statusCode(),
+                loadedPage.getStatusCode(),
                 doc.html())
         );
 
@@ -93,17 +95,15 @@ public class CrawlerTask extends RecursiveAction {
 
         List<CrawlerTask> tasks = new ArrayList<>();
 
-//        log.info("печатаем children по {}", site.getHost());
-//        for (String s : children){
-//            log.info(s);
-//        }
-//        log.info("кончили печатать children по {}", site.getHost());
-
-
         Iterator<String> iterator = children.iterator();
         while (iterator.hasNext()) {
             String child = iterator.next();
-            CrawlerTask task = new CrawlerTask(site, child, depth + 1, context);
+            CrawlerTask task = new CrawlerTask(
+                    site,
+                    child,
+                    depth + 1,
+                    context,
+                    pageLoader);
             if (iterator.hasNext()) {
                 task.fork();
                 tasks.add(task);
@@ -116,8 +116,4 @@ public class CrawlerTask extends RecursiveAction {
             task.join();
         }
     }
-//    public void runDirect(){
-//        compute();
-//    }
-
 }

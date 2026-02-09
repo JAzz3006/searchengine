@@ -8,6 +8,7 @@ import searchengine.repositories.SiteRepository;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +19,11 @@ public class SiteService {
     @Transactional
     public void deleteByUrl(String url){
         siteRepository.deleteByUrl(url);
+    }
+
+    @Transactional
+    public List<Site> getSiteByUrl(String url){
+        return siteRepository.getSiteByUrl(url);
     }
 
     @Transactional

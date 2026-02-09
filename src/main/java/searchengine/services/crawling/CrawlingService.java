@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import searchengine.config.BatchConfig;
 import searchengine.crawler.context.CrawlContext;
 import searchengine.crawler.engine.CrawlerTask;
+import searchengine.crawler.htmlfetcher.PageLoader;
 import searchengine.crawler.robots.ResolveRobotsPath;
 import searchengine.crawler.robots.ResolveRobotsRules;
 import searchengine.crawler.robots.RobotsRules;
@@ -40,6 +41,7 @@ public class CrawlingService {
     private final RobotsTxtLoader robotsTxtLoader;
     private final ResolveRobotsPath resolveRobotsPath;
     private final PageRepository pageRepository;
+    private final PageLoader pageLoader;
     private final BatchConfig batchConfig;
     private final PageContentExtractor extractor;
     private final LemmaService lemmaService;
@@ -90,7 +92,12 @@ public class CrawlingService {
 
         ForkJoinPool pool = new ForkJoinPool();
         try{
-            CrawlerTask rootTask = new CrawlerTask(site, mainUrlNormalised, 0, context);
+            CrawlerTask rootTask = new CrawlerTask(
+                    site,
+                    mainUrlNormalised,
+                    0,
+                    context,
+                    pageLoader);
             pool.invoke(rootTask);
         }finally {
             pool.shutdown();

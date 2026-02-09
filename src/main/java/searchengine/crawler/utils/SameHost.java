@@ -25,6 +25,27 @@ public class SameHost {
         }
     }
 
+    public static boolean sameHost(String u1, String siteUrl) {
+        if (u1 == null) return false;
+        try {
+            URI uri1 = new URI(u1);
+            URI siteUri = new URI(siteUrl);
+            String h1 = uri1.getHost();
+            if (h1 == null) return false;
+            String siteHost = siteUri.getHost();
+            h1 = IDN.toASCII(h1.toLowerCase(Locale.ROOT));
+            siteHost = IDN.toASCII(siteHost.toLowerCase(Locale.ROOT));
+
+            if (CrawlerConfig.SUBDOMAINS_ARE_INCLUDED){
+                return h1.equals(siteHost) || h1.endsWith("." + siteHost);
+            }else{
+                return h1.equals(siteHost);
+            }
+        } catch (URISyntaxException e) {
+            return false;
+        }
+    }
+
     public static boolean preSameHost(String ref, String siteHost) {
         if (ref == null) return false;
         String lower = ref.toLowerCase(Locale.ROOT);
