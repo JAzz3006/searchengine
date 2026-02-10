@@ -55,4 +55,9 @@ public class SiteService {
     public void updateStatusTime(Site site){
         site.setStatusTime(LocalDateTime.now());
     }
+
+    @Transactional
+    public void deleteAllSites(){
+        siteRepository.deleteAll();
+    }
 }

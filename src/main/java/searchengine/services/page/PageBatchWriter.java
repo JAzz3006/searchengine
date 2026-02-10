@@ -14,6 +14,7 @@ import searchengine.repositories.PageLemmaRepository;
 import searchengine.repositories.PageRepository;
 import searchengine.services.lemma.LemmaService;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,17 +27,19 @@ public class PageBatchWriter implements Runnable{
     private final BatchConfig batchConfig;
     private final PageContentExtractor extractor;
     private  final LemmaService lemmaService;
+    //private final PageIndexingService pageIndexingService;
     private final LemmaRepository lemmaRepository;
     private final PageLemmaRepository pageLemmaRepository;
 
     private long pageLastFlushTime = System.currentTimeMillis();
-    private long lemmaLastFlushTime = System.currentTimeMillis();
 
     @Override
     public void run() {
         log.info("PageBatchWriter started");
 
         List<Page> batch = new ArrayList<>(batchConfig.getPageSize());
+        Map<Page, Map<String, Integer>> pendingIndexes = new HashMap<>();
+
         while (!context.isFinished() || !context.getQueue().isEmpty()){
             CrawledPage dto = context.getQueue().poll();
             if (dto == null){
@@ -52,36 +55,21 @@ public class PageBatchWriter implements Runnable{
                 Map<String, Integer> lemmas = lemmaService.collectLemmas(text);
                 Page page = mapToEntity(dto);
                 batch.add(page);
+                pendingIndexes.put(page, lemmas);
 
                 if (batch.size() >= batchConfig.getPageSize() || pageFlushTimeout()) {
-                    pageFlush(batch);
+                    flushAndIndex(batch, pendingIndexes);
                 }
-                saveIndex(page, lemmas);
+
             }catch (Exception e){
-                log.error("Indexing failed for page {} : {}", dto.getUrl(), e.getMessage());
+                log.error("Indexing failed for page {} :", dto.getUrl(), e);
             }
         }
-        pageFlush(batch);
+        flushAndIndex(batch, pendingIndexes);
         log.info("PageBatchWriter finished");
     }
 
-    private void pageFlush(List<Page> batch){
-        if (batch.isEmpty()) return;
-        pageRepository.saveAll(batch);
-        batch.clear();
-        pageLastFlushTime = System.currentTimeMillis();
-    }
-
-    private void lemmaFlush(List<Lemma> lemmaBatch){
-        if (lemmaBatch.isEmpty()) return;
-        lemmaRepository.saveAll(lemmaBatch);
-        lemmaBatch.clear();
-        lemmaLastFlushTime = System.currentTimeMillis();
-    }
-
-
-    @Transactional
-    private void saveIndex(Page page, Map<String, Integer> lemmas){
+    public void saveIndex(Page page, Map<String, Integer> lemmas){
         for (Map.Entry<String, Integer> entry : lemmas.entrySet()){
             Lemma lemma = lemmaRepository.findByLemmaAndSite(entry.getKey(), page.getSite());
 
@@ -103,14 +91,24 @@ public class PageBatchWriter implements Runnable{
         }
     }
 
+    private void flushAndIndex(List<Page> batch, Map<Page, Map<String, Integer>> pendingIndexes){
+        if (batch.isEmpty()) return;
+
+        pageRepository.saveAll(batch);
+        pageRepository.flush();   // !!!
+
+        for (Page page : batch) {
+            Map<String, Integer> lemmas = pendingIndexes.get(page);
+            if (lemmas != null) saveIndex(page, lemmas);
+        }
+        batch.clear();
+        pendingIndexes.clear();
+        pageLastFlushTime = System.currentTimeMillis();
+    }
+
     private boolean pageFlushTimeout(){
         long now = System.currentTimeMillis();
         return now - pageLastFlushTime >= batchConfig.getPageFlushIntervalMs();
-    }
-
-    private boolean lemmaFlushTimeout(){
-        long now = System.currentTimeMillis();
-        return now - lemmaLastFlushTime >= batchConfig.getLemmaFlushIntervalMs();
     }
 
     private void sleepShort(){

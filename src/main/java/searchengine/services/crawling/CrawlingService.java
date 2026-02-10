@@ -22,7 +22,7 @@ import searchengine.repositories.PageRepository;
 import searchengine.services.lemma.LemmaService;
 import searchengine.services.page.PageBatchWriter;
 import searchengine.services.page.PageContentExtractor;
-
+import searchengine.services.page.PageIndexingService;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
@@ -47,9 +47,9 @@ public class CrawlingService {
     private final LemmaService lemmaService;
     private final LemmaRepository lemmaRepository;
     private final PageLemmaRepository pageLemmaRepository;
+    private final PageIndexingService pageIndexingService;
 
     public void crawl(Site site) {
-        log.info("host = {}", site.getHost());
         robotsTxtLoader.getRobotsSaved(site);
         Path robotsPath = resolveRobotsPath.resolve(site);
         ResolveRobotsRules resolver = new ResolveRobotsRules(robotsPath);
@@ -60,13 +60,10 @@ public class CrawlingService {
         String mainUrlNormalised = Normalizer.normalise(site.getUrl());
 //        String mainUrlNormalised = Stream.of(site.getUrl())
 //                .map(String::trim)
-//                .filter(RubbishFilter::notRubbish)
 //                .map(Repairer::repair)
-//                .map(Normalizer::normalise)
 //                .filter(Objects::nonNull)
-//                .filter(r -> sameHost(r, site))
+//                .map(Normalizer::normalise)
 //                .filter(BinaryFilter::isNotBinary)
-//                .filter(rules::isAllowed)
 //                .findFirst()
 //                .orElse(null);
 
@@ -86,7 +83,8 @@ public class CrawlingService {
                 extractor,
                 lemmaService,
                 lemmaRepository,
-                pageLemmaRepository);
+                pageLemmaRepository
+                );
         ExecutorService writerExecutor = Executors.newSingleThreadExecutor();
         writerExecutor.submit(pageBatchWriter);
 

@@ -15,61 +15,25 @@ public class PageLoader {
 
     private static final Logger log = LoggerFactory.getLogger(PageLoader.class);
 
-    public LoadedPage load (String url){
-        Connection.Response response = null;
-        Document doc = null;
-        try{
-            response = Jsoup.connect(url)
+    public LoadedPage load(String url) {
+        try {
+            Connection.Response response = Jsoup.connect(url)
                     .userAgent(CrawlerConfig.USER_AGENT)
                     .timeout(CrawlerConfig.TIMEOUT)
-                    .ignoreHttpErrors(CrawlerConfig.IGNORE_HTTP_ERRORS)
-                    .followRedirects(CrawlerConfig.FOLLOW_REDIRECTS)
+                    .ignoreHttpErrors(true)      // важно: чтобы получить статус даже при 4xx/5xx
+                    .followRedirects(true)
                     .execute();
 
-            doc = response.statusCode() < 400 ? response.parse() : null;
+            int code = response.statusCode();
+            String html = response.body();
 
-        }catch (IOException e){
-            throw new RuntimeException("Failed to load page: " + url, e);
+            Document doc = (code < 400) ? response.parse() : null;
+            return new LoadedPage(code, html, doc);
+
+        } catch (IOException e) {
+            log.warn("Failed to load page {}", url, e);
+            // 0 или 599 — “сетевой/технический” код, чтобы отличать от HTTP
+            return new LoadedPage(0, "", null);
         }
-        return new LoadedPage(
-                response.statusCode(),
-                response.body(),
-                doc
-        );
     }
-
-//    public Connection.Response getResponse(String url){
-//        Connection.Response response = null;
-//        try{
-//            response = Jsoup.connect(url)
-//                    .userAgent(CrawlerConfig.USER_AGENT)
-//                    .timeout(CrawlerConfig.TIMEOUT)
-//                    .ignoreHttpErrors(CrawlerConfig.IGNORE_HTTP_ERRORS)
-//                    .followRedirects(CrawlerConfig.FOLLOW_REDIRECTS)
-//                    .execute();
-//        }catch (IOException e){
-//            log.warn("Не удалось создать подключение к {}: {}", url, e.getMessage());
-//        }
-//        return response;
-//    }
-//
-//    public Document getDocument(String url){
-//
-//        Document doc = null;
-//        Connection.Response response = getResponse(url);
-//        try {
-//            if (response != null){
-//                if (response.statusCode() < 400 && response.statusCode() >= 100){
-//                    doc = response.parse();
-//                }else {
-//                    log.warn("Некорректный HTTP ответ от {}:, response code {}", url, response.statusCode());
-//                }
-//            }else {
-//                log.warn("Не удалось получить ответ от {}", url);
-//            }
-//        }catch (IOException e){
-//            log.warn("Ошибка ввода-вывода при обработке ответа от {}: {}", url, e.getMessage());
-//        }
-//        return doc;
-//    }
 }

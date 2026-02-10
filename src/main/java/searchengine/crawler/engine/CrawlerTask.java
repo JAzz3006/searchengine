@@ -14,6 +14,8 @@ import searchengine.crawler.utils.Normalizer;
 import searchengine.crawler.utils.Repairer;
 import searchengine.crawler.utils.RubbishFilter;
 import searchengine.model.Site;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.concurrent.RecursiveAction;
 import java.util.stream.Collectors;
@@ -35,10 +37,10 @@ public class CrawlerTask extends RecursiveAction {
 
     @Override
     protected void compute() {
+        log.info("CRAWL START depth={} url={}", depth, url);
         if (depth >= MAX_DEPTH){
             return;
         }
-
         int remainingBudget = context.getBudget().decrementAndGet();
         if (remainingBudget <= 0) {
             if (remainingBudget == 0) log.info("Out of budget");
@@ -52,14 +54,12 @@ public class CrawlerTask extends RecursiveAction {
         try {
             context.getThrottle().acquire();
             acquired = true;
-
             loadedPage = pageLoader.load(url);
             doc = loadedPage.getDoc();
             if (doc == null) {
                 log.info("Что-то пошло не так при загрузке по адресу: {}", url);
                 return;
             }
-
             Thread.sleep(REQUEST_DELAY_MS);
 
         } catch (InterruptedException e) {
@@ -71,14 +71,23 @@ public class CrawlerTask extends RecursiveAction {
                 context.getThrottle().release();
             }
         }
-
+        String pagePath;
+        try {
+            URI pageUri = new URI(url);
+            pagePath = pageUri.getPath();
+            if (pagePath == null || pagePath.isEmpty()){
+                pagePath = "/";
+            }
+        }catch (URISyntaxException e){
+            log.warn("Страница {} не была проиндексирована - {}", url, e.getMessage());
+            return;
+        }
         context.enqueue(new CrawledPage(
                 site,
-                url,
+                pagePath,
                 loadedPage.getStatusCode(),
                 doc.html())
         );
-
         Set<String> children = doc.select("a[href]").stream()
                 .map(e -> e.attr("abs:href"))
                 .map(String::trim)
