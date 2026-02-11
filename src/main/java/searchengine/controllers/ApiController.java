@@ -25,14 +25,28 @@ public class ApiController {
     public ApiResponse startIndexing(){
         return indexingService.startIndexing() ?
                 ApiResponse.ok() :
-                ApiResponse.error("Indexing has already started");
+                ApiResponse.error("Индексация уже запущена");
+    }
+
+    @GetMapping("/stopIndexing")
+    public ApiResponse stopIndexing(){
+        return indexingService.stopIndexing() ?
+                ApiResponse.ok() :
+                ApiResponse.error("Индексация не запущена");
     }
 
     @PostMapping("/indexPage")
-    public ResponseEntity<ApiResponse> startPageIndexing(@RequestParam String url){
-        indexingService.indexPage(url);
-        return ResponseEntity.ok(ApiResponse.ok());
+    public ApiResponse startPageIndexing(@RequestParam String url){
+        try {
+            indexingService.indexPage(url);
+            return ApiResponse.ok();
+        }catch (IllegalArgumentException e){
+            return ApiResponse.error("Данная страница находится за пределами сайтов,\n" +
+                    "указанных в конфигурационном файле");
+        }catch (IllegalStateException e){
+            return ApiResponse.error("Данная страница недоступна");
+        }catch (Exception e){
+            return ApiResponse.error("Внутренняя ошибка");
+        }
     }
-
-
 }

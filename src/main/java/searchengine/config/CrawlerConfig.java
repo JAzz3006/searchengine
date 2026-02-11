@@ -4,7 +4,9 @@ public class CrawlerConfig {
     public static final String OUTPUT_PATH = "output";// локация для хранния внешних файлов
 
     // сетевые настройидентификатор клиента
-    public static final String USER_AGENT = "Mozilla/5.0 (compatible; PASPARTU/1.0; +mailto:imathing78@mail.ru)"; //идентификатор клиента
+    public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
+            "AppleWebKit/537.36 (KHTML, like Gecko) " +
+            "Chrome/121.0.0.0 Safari/537.36"; //идентификатор клиента
     public static final int TIMEOUT = 10_000; //
     public static final boolean IGNORE_HTTP_ERRORS = true; //
     public static final boolean FOLLOW_REDIRECTS = true; //

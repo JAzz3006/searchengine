@@ -20,7 +20,7 @@ public class PageLoader {
             Connection.Response response = Jsoup.connect(url)
                     .userAgent(CrawlerConfig.USER_AGENT)
                     .timeout(CrawlerConfig.TIMEOUT)
-                    .ignoreHttpErrors(true)      // важно: чтобы получить статус даже при 4xx/5xx
+                    .ignoreHttpErrors(true)
                     .followRedirects(true)
                     .execute();
 
@@ -32,8 +32,7 @@ public class PageLoader {
 
         } catch (IOException e) {
             log.warn("Failed to load page {}", url, e);
-            // 0 или 599 — “сетевой/технический” код, чтобы отличать от HTTP
-            return new LoadedPage(0, "", null);
+            return new LoadedPage(599, "", null);
         }
     }
 }

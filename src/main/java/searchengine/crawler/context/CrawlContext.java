@@ -15,7 +15,9 @@ public class CrawlContext {
 
     private final Queue<CrawledPage> queue = new ConcurrentLinkedQueue<>();
     private final Set<String> visited = ConcurrentHashMap.newKeySet();
-    private final AtomicBoolean crawlingFinished = new AtomicBoolean(false);
+
+    private final AtomicBoolean stopped = new AtomicBoolean(false);
+    private final AtomicBoolean finished = new AtomicBoolean(false);
 
     private final RobotsRules rules;
     AtomicInteger budget;
@@ -31,11 +33,19 @@ public class CrawlContext {
         queue.offer(crawledPage);
     }
 
+    public void stop() {
+        stopped.set(true);
+    }
+
+    public boolean isStopped() {
+        return stopped.get();
+    }
+
     public void finish() {
-        crawlingFinished.set(true);
+        finished.set(true);
     }
 
     public boolean isFinished() {
-        return crawlingFinished.get();
+        return finished.get();
     }
 }

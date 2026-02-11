@@ -1,6 +1,5 @@
 package searchengine.services.indexing;
 import lombok.RequiredArgsConstructor;
-import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -12,25 +11,26 @@ import searchengine.crawler.htmlfetcher.PageLoader;
 import searchengine.crawler.utils.SameHost;
 import searchengine.model.Page;
 import searchengine.model.Site;
+import searchengine.model.Status;
 import searchengine.services.crawling.CrawlingService;
 import searchengine.services.lemma.LemmaService;
 import searchengine.services.page.PageContentExtractor;
 import searchengine.services.page.PageIndexingService;
 import searchengine.services.page.PageService;
 import searchengine.services.site.SiteService;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 @RequiredArgsConstructor
 public class IndexingService {
     private static final Logger log = LoggerFactory.getLogger(IndexingService.class);
-    private volatile boolean indexing = false;
+    private final AtomicBoolean indexing = new AtomicBoolean(false);
     private final SitesList sitesList;
     private final SiteService siteService;
     private final PageService pageService;
@@ -42,10 +42,9 @@ public class IndexingService {
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     public boolean startIndexing() {
-        if (indexing){
+        if (!indexing.compareAndSet(false, true)){
             return false;
         }
-        indexing = true;
 
         for (SiteConfig siteConfig : sitesList.getSites()){
             executor.submit(() -> indexSite(siteConfig));
@@ -64,7 +63,20 @@ public class IndexingService {
     }
 
     public boolean stopIndexing() {
-        return false;
+        if (!indexing.get()) return false;
+
+        log.info("User requested stopIndexing()");
+
+        crawlingService.stopAll();
+
+        List<Site> indexingSites = siteService.getSitesByStatus(Status.INDEXING);
+
+        for (Site site : indexingSites){
+            siteService.markFailed(site, new RuntimeException("Индексация остановлена пользователем"));
+        }
+
+        indexing.set(false);
+        return true;
     }
 
     @Transactional
@@ -73,10 +85,10 @@ public class IndexingService {
         try{
             URI apiUri = new URI(normalisedApiUrl);
             if (apiUri.getScheme() == null) {
-                throw new RuntimeException("Page address " + normalisedApiUrl + " must contain schema");
+                throw new IllegalArgumentException("Page address " + normalisedApiUrl + " must contain schema");
             }
             if (apiUri.getHost() == null) {
-                throw new RuntimeException("Page address " + normalisedApiUrl + " must contain host");
+                throw new IllegalArgumentException("Page address " + normalisedApiUrl + " must contain host");
             }
 
             String apiSiteUrl = apiUri.getScheme() + "://" + apiUri.getHost();
@@ -84,12 +96,12 @@ public class IndexingService {
                     .filter(config -> SameHost.sameHost(apiSiteUrl, config.getUrl()))
                     .findFirst()
                     .orElseThrow(() ->
-                            new RuntimeException("Page address " + normalisedApiUrl + " is from unknown site")
+                            new IllegalArgumentException("Page address " + normalisedApiUrl + " is from unknown site")
                     );
 
             List<Site> sites = siteService.getSiteByUrl(siteConfig.getUrl());
             Site site = sites.isEmpty()
-                    ? siteService.createIndexingSite(siteConfig.getUrl(), siteConfig.getName())
+                    ? siteService.createSiteForPageIndexing(siteConfig.getUrl(), siteConfig.getName())
                     : sites.get(0);
 
             String path = apiUri.getPath();
@@ -100,10 +112,10 @@ public class IndexingService {
 
             LoadedPage loadedPage = pageloader.load(normalisedApiUrl);
 
-            if (loadedPage.getStatusCode() >= 400){
-                throw new IllegalArgumentException("Page returned error status: " + loadedPage.getStatusCode());
+            if (loadedPage.getStatusCode() >= 400 || loadedPage.getDoc() == null){
+                throw new IllegalStateException("Page returned error status: " + loadedPage.getStatusCode());
             }
-                String text = extractor.textExtractor(loadedPage.getDoc().html());
+                String text = extractor.textExtractor(loadedPage.getHtml());
                 Map<String, Integer> lemmas = lemmaService.collectLemmas(text);
                 Page page = new Page();
                 page.setCode(loadedPage.getStatusCode());
@@ -113,7 +125,7 @@ public class IndexingService {
                 page = pageService.savePage(page);
                 pageIndexingService.saveIndex(page, lemmas);
         } catch (URISyntaxException e) {
-            throw new RuntimeException("Wrong page address format");
+            throw new IllegalArgumentException("Wrong page address format");
         }
     }
 

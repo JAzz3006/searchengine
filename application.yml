@@ -12,7 +12,7 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
 
 indexing-settings:
   sites:
@@ -29,9 +29,10 @@ batch:
 
 logging:
   level:
-    root: DEBUG
+    root: INFO
     org.springframework: WARN
-    org.hibernate: WARN
+    org.hibernate: ERROR
     org.hibernate.SQL: OFF
     org.hibernate.type: OFF
+    com.zaxxer.hikari: WARN
     searchengine: DEBUG

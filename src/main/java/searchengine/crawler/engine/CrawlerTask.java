@@ -14,6 +14,7 @@ import searchengine.crawler.utils.Normalizer;
 import searchengine.crawler.utils.Repairer;
 import searchengine.crawler.utils.RubbishFilter;
 import searchengine.model.Site;
+import searchengine.services.site.SiteService;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -34,10 +35,14 @@ public class CrawlerTask extends RecursiveAction {
     private final int depth;
     private final CrawlContext context;
     private final PageLoader pageLoader;
+    private final SiteService siteService;
 
     @Override
     protected void compute() {
+        if (stopped()) return;
+
         log.info("CRAWL START depth={} url={}", depth, url);
+
         if (depth >= MAX_DEPTH){
             return;
         }
@@ -48,18 +53,24 @@ public class CrawlerTask extends RecursiveAction {
             return;
         }
         Document doc;
-        Connection.Response response;
         LoadedPage loadedPage;
         boolean acquired = false;
         try {
             context.getThrottle().acquire();
             acquired = true;
+
+            if (stopped()) return;
+
             loadedPage = pageLoader.load(url);
+
+            if (stopped()) return;
+
             doc = loadedPage.getDoc();
             if (doc == null) {
                 log.info("Что-то пошло не так при загрузке по адресу: {}", url);
                 return;
             }
+            siteService.updateStatusTime(site);
             Thread.sleep(REQUEST_DELAY_MS);
 
         } catch (InterruptedException e) {
@@ -71,6 +82,9 @@ public class CrawlerTask extends RecursiveAction {
                 context.getThrottle().release();
             }
         }
+
+        if (stopped()) return;
+
         String pagePath;
         try {
             URI pageUri = new URI(url);
@@ -82,6 +96,7 @@ public class CrawlerTask extends RecursiveAction {
             log.warn("Страница {} не была проиндексирована - {}", url, e.getMessage());
             return;
         }
+
         context.enqueue(new CrawledPage(
                 site,
                 pagePath,
@@ -105,14 +120,19 @@ public class CrawlerTask extends RecursiveAction {
         List<CrawlerTask> tasks = new ArrayList<>();
 
         Iterator<String> iterator = children.iterator();
+
         while (iterator.hasNext()) {
+
+            if (stopped()) return;
+
             String child = iterator.next();
             CrawlerTask task = new CrawlerTask(
                     site,
                     child,
                     depth + 1,
                     context,
-                    pageLoader);
+                    pageLoader,
+                    siteService);
             if (iterator.hasNext()) {
                 task.fork();
                 tasks.add(task);
@@ -124,5 +144,13 @@ public class CrawlerTask extends RecursiveAction {
         for (CrawlerTask task : tasks) {
             task.join();
         }
+    }
+
+    private boolean stopped() {
+        if (context.isStopped()) {
+            log.info("STOP detected at depth {} for url {}", depth, url);
+            return true;
+        }
+        return false;
     }
 }

@@ -2,7 +2,6 @@ package searchengine.services.page;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
 import searchengine.config.BatchConfig;
 import searchengine.crawler.context.CrawlContext;
 import searchengine.crawler.context.CrawledPage;
@@ -27,7 +26,6 @@ public class PageBatchWriter implements Runnable{
     private final BatchConfig batchConfig;
     private final PageContentExtractor extractor;
     private  final LemmaService lemmaService;
-    //private final PageIndexingService pageIndexingService;
     private final LemmaRepository lemmaRepository;
     private final PageLemmaRepository pageLemmaRepository;
 
@@ -40,7 +38,13 @@ public class PageBatchWriter implements Runnable{
         List<Page> batch = new ArrayList<>(batchConfig.getPageSize());
         Map<Page, Map<String, Integer>> pendingIndexes = new HashMap<>();
 
-        while (!context.isFinished() || !context.getQueue().isEmpty()){
+        while (true){
+            if ((context.isStopped() || context.isFinished())
+                    && context.getQueue().isEmpty()){
+                log.info("Writer sees STOP signal");
+                break;
+            }
+
             CrawledPage dto = context.getQueue().poll();
             if (dto == null){
                 sleepShort();

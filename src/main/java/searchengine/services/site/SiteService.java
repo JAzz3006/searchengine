@@ -1,11 +1,9 @@
 package searchengine.services.site;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import searchengine.config.SiteConfig;
 import searchengine.model.Site;
 import searchengine.model.Status;
 import searchengine.repositories.SiteRepository;
-
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,17 +25,35 @@ public class SiteService {
     }
 
     @Transactional
+    public List<Site> getSitesByStatus(Status status){
+        return siteRepository.getSitesByStatus(status);
+    }
+
+    @Transactional
     public Site createIndexingSite(String url, String name){
-        Site site = new Site();
-        site.setName(name);
+        Site site = createSite(url, name);
         site.setStatus(Status.INDEXING);
-        site.setStatusTime(LocalDateTime.now());
-        site.setUrl(url);
         return siteRepository.save(site);
     }
 
     @Transactional
+    public Site createSiteForPageIndexing(String url, String name){
+        Site site = createSite(url, name);
+        site.setStatus(Status.INDEXED);
+        return siteRepository.save(site);
+    }
+
+    private Site createSite(String url, String name){
+        Site site = new Site();
+        site.setName(name);
+        site.setStatusTime(LocalDateTime.now());
+        site.setUrl(url);
+        return site;
+    }
+
+    @Transactional
     public void markIndexed(Site site){
+        if (site.getStatus() != Status.INDEXING) return;
         site.setStatus(Status.INDEXED);
         site.setStatusTime(LocalDateTime.now());
         siteRepository.save(site);
@@ -45,6 +61,7 @@ public class SiteService {
 
     @Transactional
     public void markFailed(Site site, Exception e){
+        if (site.getStatus() != Status.INDEXING) return;
         site.setStatus(Status.FAILED);
         site.setStatusTime(LocalDateTime.now());
         site.setLastError(e.getMessage());
@@ -54,10 +71,6 @@ public class SiteService {
     @Transactional
     public void updateStatusTime(Site site){
         site.setStatusTime(LocalDateTime.now());
-    }
-
-    @Transactional
-    public void deleteAllSites(){
-        siteRepository.deleteAll();
+        siteRepository.save(site);
     }
 }
