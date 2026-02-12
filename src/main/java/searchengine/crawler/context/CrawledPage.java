@@ -7,7 +7,7 @@ import searchengine.model.Site;
 @Getter
 public class CrawledPage {
     Site site;
-    String url;
+    String pagePath;
     int statusCode;
     String content;
 }

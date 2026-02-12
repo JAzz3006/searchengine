@@ -5,4 +5,5 @@ import searchengine.model.Site;
 
 public interface LemmaRepository extends JpaRepository<Lemma, Long> {
     Lemma findByLemmaAndSite(String lemma, Site site);
+    int countBySite(Site site);
 }

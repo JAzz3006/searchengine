@@ -1,5 +1,4 @@
 package searchengine.services.statistics;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import searchengine.config.SiteConfig;
@@ -8,46 +7,67 @@ import searchengine.dto.statistics.DetailedStatisticsItem;
 import searchengine.dto.statistics.StatisticsData;
 import searchengine.dto.statistics.StatisticsResponse;
 import searchengine.dto.statistics.TotalStatistics;
+import searchengine.model.Site;
+import searchengine.repositories.LemmaRepository;
+import searchengine.repositories.PageRepository;
+import searchengine.repositories.SiteRepository;
+import searchengine.services.indexing.IndexingService;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class StatisticsServiceImpl implements StatisticsService {
 
-    private final Random random = new Random();
     private final SitesList sites;
+    private final PageRepository pageRepository;
+    private final SiteRepository siteRepository;
+    private final LemmaRepository lemmaRepository;
+    private final IndexingService indexingService;
 
     @Override
     public StatisticsResponse getStatistics() {
-        String[] statuses = { "INDEXED", "FAILED", "INDEXING" };
-        String[] errors = {
-                "Ошибка индексации: главная страница сайта не доступна",
-                "Ошибка индексации: сайт не доступен",
-                ""
-        };
 
         TotalStatistics total = new TotalStatistics();
         total.setSites(sites.getSites().size());
-        total.setIndexing(true);
+        total.setIndexing(indexingService.isIndexing());
 
         List<DetailedStatisticsItem> detailed = new ArrayList<>();
         List<SiteConfig> sitesList = sites.getSites();
-        for(int i = 0; i < sitesList.size(); i++) {
+        for (int i = 0; i < sitesList.size(); i++) {
             SiteConfig site = sitesList.get(i);
             DetailedStatisticsItem item = new DetailedStatisticsItem();
             item.setName(site.getName());
-            item.setUrl(site.getUrl());
-            int pages = random.nextInt(1_000);
-            int lemmas = pages * random.nextInt(1_000);
-            item.setPages(pages);
-            item.setLemmas(lemmas);
-            item.setStatus(statuses[i % 3]);
-            item.setError(errors[i % 3]);
-            item.setStatusTime(System.currentTimeMillis() -
-                    (random.nextInt(10_000)));
+            String normalizedUrl = IndexingService.normalizeSiteUrl(site.getUrl());
+            item.setUrl(normalizedUrl);
+            Optional<Site> optionalSiteEntity = siteRepository.findByUrl(normalizedUrl);
+            int pages = 0;
+            int lemmas = 0;
+            if (optionalSiteEntity.isPresent()){
+                Site siteEntity = optionalSiteEntity.get();
+                pages = pageRepository.countBySite(siteEntity);
+                item.setPages(pages);
+                lemmas = lemmaRepository.countBySite(siteEntity);
+                item.setLemmas(lemmas);
+                item.setStatus(siteEntity.getStatus().name());
+                item.setError(
+                        siteEntity.getLastError() == null ? "" : siteEntity.getLastError()
+                );
+                item.setStatusTime(siteEntity.getStatusTime()
+                        .atZone(ZoneId.systemDefault())
+                        .toInstant()
+                        .toEpochMilli());
+            }else {
+                item.setPages(0);
+                item.setLemmas(0);
+                item.setStatus("INDEXED");
+                item.setError("");
+                item.setStatusTime(0);
+            }
+
             total.setPages(total.getPages() + pages);
             total.setLemmas(total.getLemmas() + lemmas);
             detailed.add(item);

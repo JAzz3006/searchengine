@@ -9,7 +9,12 @@ import java.util.Set;
     @Setter
     @NoArgsConstructor
     @Entity
-    @Table(name = "page")
+    @Table(
+            name = "page",
+            uniqueConstraints = {
+                    @UniqueConstraint(columnNames = {"site_id", "path"})
+            }
+    )
     public class Page {
 
         @Id

@@ -12,10 +12,9 @@ import searchengine.repositories.LemmaRepository;
 import searchengine.repositories.PageLemmaRepository;
 import searchengine.repositories.PageRepository;
 import searchengine.services.lemma.LemmaService;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RequiredArgsConstructor
 public class PageBatchWriter implements Runnable{
@@ -37,6 +36,7 @@ public class PageBatchWriter implements Runnable{
 
         List<Page> batch = new ArrayList<>(batchConfig.getPageSize());
         Map<Page, Map<String, Integer>> pendingIndexes = new HashMap<>();
+        Set<String> persistedPaths = ConcurrentHashMap.newKeySet();
 
         while (true){
             if ((context.isStopped() || context.isFinished())
@@ -53,6 +53,10 @@ public class PageBatchWriter implements Runnable{
             if (dto.getStatusCode() >= 400){
                 continue;
             }
+            if (!persistedPaths.add(dto.getPagePath())){
+                log.debug("Duplicate page skipped: {}", dto.getPagePath());
+                continue;
+            }
 
             try {
                 String text = extractor.textExtractor(dto.getContent());
@@ -66,7 +70,7 @@ public class PageBatchWriter implements Runnable{
                 }
 
             }catch (Exception e){
-                log.error("Indexing failed for page {} :", dto.getUrl(), e);
+                log.error("Indexing failed for page {} :", dto.getPagePath(), e);
             }
         }
         flushAndIndex(batch, pendingIndexes);
@@ -125,7 +129,7 @@ public class PageBatchWriter implements Runnable{
 
     private Page mapToEntity(CrawledPage crawledPage){
         Page page = new Page();
-        page.setPath(crawledPage.getUrl());
+        page.setPath(crawledPage.getPagePath());
         page.setSite(crawledPage.getSite());
         page.setContent(crawledPage.getContent());
         page.setCode(crawledPage.getStatusCode());

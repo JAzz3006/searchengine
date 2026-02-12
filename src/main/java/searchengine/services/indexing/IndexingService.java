@@ -1,4 +1,5 @@
 package searchengine.services.indexing;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +26,14 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
 public class IndexingService {
     private static final Logger log = LoggerFactory.getLogger(IndexingService.class);
     private final AtomicBoolean indexing = new AtomicBoolean(false);
+    private final AtomicInteger activeSites = new AtomicInteger(0);
     private final SitesList sitesList;
     private final SiteService siteService;
     private final PageService pageService;
@@ -46,25 +49,38 @@ public class IndexingService {
             return false;
         }
 
-        for (SiteConfig siteConfig : sitesList.getSites()){
-            executor.submit(() -> indexSite(siteConfig));
+        List<SiteConfig> configs = sitesList.getSites();
+        if (configs.isEmpty()) {
+            indexing.set(false);
+            return false;
         }
 
+        for (SiteConfig siteConfig : sitesList.getSites()){
+            activeSites.incrementAndGet();
+            executor.submit(() -> indexSite(siteConfig));
+        }
         return true;
     }
 
     private void indexSite(SiteConfig siteConfig){
-        String siteUrl = normalizeSiteUrl(siteConfig.getUrl());
-        siteService.deleteByUrl(siteUrl);
-        Site site = siteService.createIndexingSite(
-                siteUrl,
-                siteConfig.getName());
-        crawlingService.crawl(site);
+        try {
+            String siteUrl = normalizeSiteUrl(siteConfig.getUrl());
+            siteService.deleteByUrl(siteUrl);
+            Site site = siteService.createIndexingSite(
+                    siteUrl,
+                    siteConfig.getName());
+            crawlingService.crawl(site);
+        }finally {
+            if (activeSites.decrementAndGet() == 0){
+                indexing.set(false);
+                log.info("All sites indexed. Indexing finished.");
+            }
+        }
+
     }
 
     public boolean stopIndexing() {
         if (!indexing.get()) return false;
-
         log.info("User requested stopIndexing()");
 
         crawlingService.stopAll();
@@ -74,7 +90,6 @@ public class IndexingService {
         for (Site site : indexingSites){
             siteService.markFailed(site, new RuntimeException("Индексация остановлена пользователем"));
         }
-
         indexing.set(false);
         return true;
     }
@@ -146,5 +161,9 @@ public class IndexingService {
             url = url.substring(0, url.length() - 1);
         }
         return url;
+    }
+
+    public boolean isIndexing(){
+        return indexing.get();
     }
 }
