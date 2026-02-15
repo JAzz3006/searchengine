@@ -12,6 +12,7 @@ import searchengine.repositories.LemmaRepository;
 import searchengine.repositories.PageRepository;
 import searchengine.repositories.SiteRepository;
 import searchengine.services.indexing.IndexingService;
+import searchengine.util.UrlNormalizer;
 
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class StatisticsServiceImpl implements StatisticsService {
             SiteConfig site = sitesList.get(i);
             DetailedStatisticsItem item = new DetailedStatisticsItem();
             item.setName(site.getName());
-            String normalizedUrl = IndexingService.normalizeSiteUrl(site.getUrl());
+            String normalizedUrl = UrlNormalizer.normalizeSiteUrl(site.getUrl());
             item.setUrl(normalizedUrl);
             Optional<Site> optionalSiteEntity = siteRepository.findByUrl(normalizedUrl);
             int pages = 0;

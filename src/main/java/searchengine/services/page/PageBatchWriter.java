@@ -12,7 +12,6 @@ import searchengine.repositories.LemmaRepository;
 import searchengine.repositories.PageLemmaRepository;
 import searchengine.repositories.PageRepository;
 import searchengine.services.lemma.LemmaService;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -79,16 +78,15 @@ public class PageBatchWriter implements Runnable{
 
     public void saveIndex(Page page, Map<String, Integer> lemmas){
         for (Map.Entry<String, Integer> entry : lemmas.entrySet()){
-            Lemma lemma = lemmaRepository.findByLemmaAndSite(entry.getKey(), page.getSite());
 
-            if (lemma == null) {
-                lemma = new Lemma();
-                lemma.setSite(page.getSite());
-                lemma.setLemma(entry.getKey());
-                lemma.setFrequency(0);
-            }
-
-            lemma.setFrequency(lemma.getFrequency() + 1);
+            Optional<Lemma> optLemma = lemmaRepository.findByLemmaAndSite(entry.getKey(), page.getSite());
+            Lemma lemma = optLemma.orElseGet(() -> {
+                        Lemma newLemma = new Lemma();
+                        newLemma.setSite(page.getSite());
+                        newLemma.setLemma(entry.getKey());
+                        newLemma.setFrequency(0);
+                        return newLemma;
+                    });
             lemmaRepository.save(lemma);
 
             PageLemma pageLemma = new PageLemma();

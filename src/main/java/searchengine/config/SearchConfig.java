@@ -1,5 +1,5 @@
 package searchengine.config;
 
 public class SearchConfig {
-    public static final float TOP_FREQUENT_LEMMAS_RATIO = 0.2f;
+    public static final float MAX_ALLOWED_LEMMA_FREQUENCY_RATIO = 0.8f;
 }

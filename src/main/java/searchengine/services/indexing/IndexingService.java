@@ -19,6 +19,8 @@ import searchengine.services.page.PageContentExtractor;
 import searchengine.services.page.PageIndexingService;
 import searchengine.services.page.PageService;
 import searchengine.services.site.SiteService;
+import searchengine.util.UrlNormalizer;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -64,7 +66,7 @@ public class IndexingService {
 
     private void indexSite(SiteConfig siteConfig){
         try {
-            String siteUrl = normalizeSiteUrl(siteConfig.getUrl());
+            String siteUrl = UrlNormalizer.normalizeSiteUrl(siteConfig.getUrl());
             siteService.deleteByUrl(siteUrl);
             Site site = siteService.createIndexingSite(
                     siteUrl,
@@ -96,7 +98,7 @@ public class IndexingService {
 
     @Transactional
     public void indexPage(String apiUrl) {
-        String normalisedApiUrl = ensureScheme(apiUrl);
+        String normalisedApiUrl = UrlNormalizer.ensureScheme(apiUrl);
         try{
             URI apiUri = new URI(normalisedApiUrl);
             if (apiUri.getScheme() == null) {
@@ -142,25 +144,6 @@ public class IndexingService {
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException("Wrong page address format");
         }
-    }
-
-    public static String ensureScheme(String rawUrl) {
-        if (rawUrl == null) return null;
-
-        String url = rawUrl.trim();
-        if (url.isEmpty()) return null;
-        if (!url.matches("^[a-zA-Z][a-zA-Z0-9+.-]*://.*")) {
-            return "https://" + url;
-        }
-        return url;
-    }
-
-    public static String normalizeSiteUrl(String rawUrl){
-        String url = ensureScheme(rawUrl);
-        if (rawUrl.endsWith("/")){
-            url = url.substring(0, url.length() - 1);
-        }
-        return url;
     }
 
     public boolean isIndexing(){

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import searchengine.dto.response.ApiResponse;
 import searchengine.dto.statistics.StatisticsResponse;
 import searchengine.services.indexing.IndexingService;
+import searchengine.services.search.RequestService;
 import searchengine.services.statistics.StatisticsService;
 
 @RequiredArgsConstructor
@@ -15,6 +16,7 @@ public class ApiController {
 
     private final StatisticsService statisticsService;
     private final IndexingService indexingService;
+    private final RequestService requestService;
 
 
     @GetMapping("/statistics")
@@ -57,7 +59,12 @@ public class ApiController {
         }
     }
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse> search(@RequestParam String req){
+    public ResponseEntity<ApiResponse> search (
+            @RequestParam String req,
+            @RequestParam int offset,
+            @RequestParam int limit,
+            @RequestParam String siteUrl){
+        requestService.startSearch(req, offset, limit, siteUrl);
         return ResponseEntity.ok(ApiResponse.ok());
     }
 }
