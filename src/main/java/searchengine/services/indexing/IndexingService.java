@@ -1,5 +1,4 @@
 package searchengine.services.indexing;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,11 +14,11 @@ import searchengine.model.Site;
 import searchengine.model.Status;
 import searchengine.services.crawling.CrawlingService;
 import searchengine.services.lemma.LemmaService;
-import searchengine.services.page.PageContentExtractor;
 import searchengine.services.page.PageIndexingService;
 import searchengine.services.page.PageService;
 import searchengine.services.site.SiteService;
-import searchengine.util.UrlNormalizer;
+import searchengine.util.html.HtmlTextExtractor;
+import searchengine.util.url.UrlNormalizer;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -41,7 +40,7 @@ public class IndexingService {
     private final PageService pageService;
     private final CrawlingService crawlingService;
     private final PageLoader pageloader;
-    private final PageContentExtractor extractor;
+    //private final PageContentExtractor extractor;
     private final LemmaService lemmaService;
     private final PageIndexingService pageIndexingService;
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
@@ -132,7 +131,7 @@ public class IndexingService {
             if (loadedPage.getStatusCode() >= 400 || loadedPage.getDoc() == null){
                 throw new IllegalStateException("Page returned error status: " + loadedPage.getStatusCode());
             }
-                String text = extractor.textExtractor(loadedPage.getHtml());
+                String text = HtmlTextExtractor.textExtractor(loadedPage.getHtml());
                 Map<String, Integer> lemmas = lemmaService.collectLemmas(text);
                 Page page = new Page();
                 page.setCode(loadedPage.getStatusCode());

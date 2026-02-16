@@ -1,4 +1,4 @@
-package searchengine.util;
+package searchengine.util.url;
 
 public final class UrlNormalizer {
     private UrlNormalizer(){}

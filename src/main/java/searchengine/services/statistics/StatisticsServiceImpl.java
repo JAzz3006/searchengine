@@ -12,7 +12,7 @@ import searchengine.repositories.LemmaRepository;
 import searchengine.repositories.PageRepository;
 import searchengine.repositories.SiteRepository;
 import searchengine.services.indexing.IndexingService;
-import searchengine.util.UrlNormalizer;
+import searchengine.util.url.UrlNormalizer;
 
 import java.time.ZoneId;
 import java.util.ArrayList;

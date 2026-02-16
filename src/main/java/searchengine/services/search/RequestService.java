@@ -1,5 +1,4 @@
 package searchengine.services.search;
-
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +13,9 @@ import searchengine.repositories.PageLemmaRepository;
 import searchengine.repositories.PageRepository;
 import searchengine.repositories.SiteRepository;
 import searchengine.services.lemma.LemmaService;
-import searchengine.util.UrlNormalizer;
-
+import searchengine.util.html.HtmlParserUtils;
+import searchengine.util.html.HtmlTextExtractor;
+import searchengine.util.url.UrlNormalizer;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,9 +29,9 @@ public class RequestService {
     private final LemmaRepository lemmaRepository;
     private final PageLemmaRepository pageLemmaRepository;
     private final SitesList sitesList;
+    private final SnippetBuilder snippetBuilder;
 
-    //TODO: проверку на наличие сайта в БД и на наличие статуса INDEXED
-    //посмотреть в итоге какие методы оставить public, а какие перевести private
+    //TODO: посмотреть в итоге какие методы оставить public, а какие перевести private
 
     public List<SearchResultItem> startSearch(String req, int offset, int limit, String siteUrl){
             List<SearchResultItem> resultItems = new ArrayList<>();
@@ -97,6 +97,9 @@ public class RequestService {
             item.setSite(site.getUrl());
             item.setSiteName(site.getName());
             item.setUri(page.getPath());
+            item.setRelevance(pageAbsRelevance.get(page.getId()));
+            item.setSnippet(snippetBuilder.buildSnippet(page, lemmasOfRequest));
+            item.setTitle(HtmlParserUtils.extractTitle(page.getContent()));
         }
 
         return results;
@@ -166,5 +169,7 @@ public class RequestService {
         }
         return lemmaService.collectLemmas(req).keySet();
     }
+
+
 
 }

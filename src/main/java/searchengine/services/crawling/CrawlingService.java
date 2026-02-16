@@ -18,7 +18,6 @@ import searchengine.repositories.PageLemmaRepository;
 import searchengine.repositories.PageRepository;
 import searchengine.services.lemma.LemmaService;
 import searchengine.services.page.PageBatchWriter;
-import searchengine.services.page.PageContentExtractor;
 import searchengine.services.site.SiteService;
 import java.nio.file.Path;
 import java.util.List;
@@ -36,7 +35,7 @@ public class CrawlingService {
     private final PageRepository pageRepository;
     private final PageLoader pageLoader;
     private final BatchConfig batchConfig;
-    private final PageContentExtractor extractor;
+    //private final PageContentExtractor extractor;
     private final LemmaService lemmaService;
     private final LemmaRepository lemmaRepository;
     private final PageLemmaRepository pageLemmaRepository;
@@ -79,7 +78,6 @@ public class CrawlingService {
                     context,
                     pageRepository,
                     batchConfig,
-                    extractor,
                     lemmaService,
                     lemmaRepository,
                     pageLemmaRepository
