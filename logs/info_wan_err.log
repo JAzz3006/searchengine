@@ -1,0 +1,458 @@
+[18:30:20] INFO  [searchengine.Application] - Starting Application using Java 17.0.17 on DESKTOP-TV7893L with PID 9316 (C:\Users\Cybermart\IdeaProjects\searchengine\target\classes started by Cybermart in C:\Users\Cybermart\IdeaProjects\searchengine)
+[18:30:20] INFO  [searchengine.Application] - No active profile set, falling back to 1 default profile: "default"
+[18:30:22] INFO  [o.a.coyote.http11.Http11NioProtocol] - Initializing ProtocolHandler ["http-nio-8080"]
+[18:30:22] INFO  [o.a.catalina.core.StandardService] - Starting service [Tomcat]
+[18:30:22] INFO  [o.a.catalina.core.StandardEngine] - Starting Servlet engine: [Apache Tomcat/9.0.64]
+[18:30:23] INFO  [o.a.c.c.C.[Tomcat].[localhost].[/]] - Initializing Spring embedded WebApplicationContext
+[18:30:24] INFO  [liquibase.lockservice] - Successfully acquired change log lock
+[18:30:25] INFO  [liquibase.changelog] - Creating database history table with name: search_engine.DATABASECHANGELOG
+[18:30:25] INFO  [liquibase.changelog] - Reading from search_engine.DATABASECHANGELOG
+[18:30:25] INFO  [liquibase.changelog] - Table site created
+[18:30:25] INFO  [liquibase.changelog] - ChangeSet db/changelog/db.changelog-master.xml::1-create-site::greg ran successfully in 49ms
+[18:30:25] INFO  [liquibase.changelog] - Table page created
+[18:30:25] INFO  [liquibase.changelog] - Foreign key constraint added to page (site_id)
+[18:30:25] INFO  [liquibase.changelog] - Unique constraint added to page(site_id, path)
+[18:30:25] INFO  [liquibase.changelog] - ChangeSet db/changelog/db.changelog-master.xml::2-create-page::greg ran successfully in 137ms
+[18:30:25] INFO  [liquibase.changelog] - Table lemma created
+[18:30:25] INFO  [liquibase.changelog] - Foreign key constraint added to lemma (site_id)
+[18:30:25] INFO  [liquibase.changelog] - Unique constraint added to lemma(site_id, lemma)
+[18:30:25] INFO  [liquibase.changelog] - ChangeSet db/changelog/db.changelog-master.xml::3-create-lemma::greg ran successfully in 204ms
+[18:30:25] INFO  [liquibase.changelog] - Table page_lemma created
+[18:30:25] INFO  [liquibase.changelog] - Foreign key constraint added to page_lemma (page_id)
+[18:30:25] INFO  [liquibase.changelog] - Foreign key constraint added to page_lemma (lemma_id)
+[18:30:26] INFO  [liquibase.changelog] - Unique constraint added to page_lemma(page_id, lemma_id)
+[18:30:26] INFO  [liquibase.changelog] - Index idx_pagelemma_page created
+[18:30:26] INFO  [liquibase.changelog] - Index idx_pagelemma_lemma created
+[18:30:26] INFO  [liquibase.changelog] - ChangeSet db/changelog/db.changelog-master.xml::4-create-page-lemma::greg ran successfully in 343ms
+[18:30:26] INFO  [liquibase.lockservice] - Successfully released change log lock
+[18:30:35] WARN  [o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[18:30:36] INFO  [o.a.coyote.http11.Http11NioProtocol] - Starting ProtocolHandler ["http-nio-8080"]
+[18:30:36] INFO  [searchengine.Application] - Started Application in 16.777 seconds (JVM running for 17.426)
+[18:30:56] INFO  [o.a.c.c.C.[Tomcat].[localhost].[/]] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[18:33:56] INFO  [s.services.page.PageBatchWriter] - PageBatchWriter started
+[18:33:56] INFO  [s.services.page.PageBatchWriter] - PageBatchWriter started
+[18:33:56] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=0 url=https://nikoartgallery.com/
+[18:33:56] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=0 url=https://dombulgakova.ru/
+[18:34:00] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://nikoartgallery.com/afisha-scene
+[18:34:00] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://nikoartgallery.com/news/vystavki/uchastie-v-51-antikvarnom-salone
+[18:34:00] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://nikoartgallery.com/privacy-policy
+[18:34:00] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/2025/12/08/pyatyj-vahtangovskij-festival-teatralnyh-menedzherov-zavershen
+[18:34:00] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://nikoartgallery.com/afisha
+[18:34:00] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/shkola-studiya-bulgakovkogo-doma
+[18:34:00] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/novosti
+[18:34:00] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/2020/04/01/pryamye-efiry
+[18:34:02] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/news/vystavki/uchastie-v-51-antikvarnom-salone
+[18:34:02] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://nikoartgallery.com/news/vystavki/nikolay-nikogosyan-puteshestviya-peyzazhi-1980kh-1990kh
+[18:34:02] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/news/vystavki/nikolay-nikogosyan-puteshestviya-peyzazhi-1980kh-1990kh
+[18:34:02] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://nikoartgallery.com/en
+[18:34:03] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/category/novosti
+[18:34:04] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/2025/11/27/muzej-teatr-bulgakovskij-dom-stal-pobeditelem-konkursa-grantov-mera-moskvy-2025
+[18:34:04] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/afisha-scene/duet-time
+[18:34:06] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/en/gallery
+[18:34:06] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/komanda
+[18:34:06] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/nashi-nagrady
+[18:34:08] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2025/11/12/segodnya-muzej-teatr-bulgakovskij-dom-prinimaet-pozdravleniya-my-vyigrali-grant-ot-prezidentskogo-fonda-kulturnyh-inicziativ
+[18:34:08] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2025/10/16/24-oktyabrya-priglashaem-vas-na-spektakl-otkrovenie-o-lyubvi-rukopisi-ne-goryat
+[18:34:08] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/category/novosti/page/2
+[18:34:08] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://nikoartgallery.com/author
+[18:34:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/fotogalereya-dom
+[18:34:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/en/gallery?PAGEN_1=2&SIZEN_1=20
+[18:34:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/en/news/vystavki/otkrylas-vystavka-armyanskikh-khudozhnikov
+[18:34:10] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/afisha-scene/duet-time
+[18:34:10] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/afisha-scene/kontsert-na-bis-solnyy-kontsert-khiroko-ninagavy
+[18:34:10] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/den-rozhdeniya-m-a-bulgakova
+[18:34:11] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/afisha-scene/kontsert-na-bis-solnyy-kontsert-khiroko-ninagavy
+[18:34:11] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/en/afisha
+[18:34:11] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/vystavki
+[18:34:12] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/afisha/ansambl-masm-karnaval-litsa-maski
+[18:34:12] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/8-marta
+[18:34:12] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/en/news/vystavki/otkrylas-vystavka-armyanskikh-khudozhnikov
+[18:34:12] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/afisha/-orfey-mezhdu-molchanem-i-rechyu
+[18:34:13] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/afisha/-orfey-mezhdu-molchanem-i-rechyu
+[18:34:13] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/afisha/mavritanskie-violy-flamenko
+[18:34:13] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/klub-bulgakovskogo-doma
+[18:34:14] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/afisha/mavritanskie-violy-flamenko
+[18:34:14] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/afisha/vecher-tretiy-yuriy-martynov-i-kapella-zolotoy-vek-betkhoven-shuman-tits-
+[18:34:14] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/stories
+[18:34:14] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/afisha/vecher-tretiy-yuriy-martynov-i-kapella-zolotoy-vek-betkhoven-shuman-tits-
+[18:34:14] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/afisha/oleg-khudyakov-fortepiano-chaykovskiy-rakhmaninov-v-prodazhe-galereya-iskusstv-niko
+[18:34:14] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/otrazhenie
+[18:34:15] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/afisha/oleg-khudyakov-fortepiano-chaykovskiy-rakhmaninov-v-prodazhe-galereya-iskusstv-niko
+[18:34:15] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/afisha/rem-urasin-fortepiano-motsart-shopen-yakhin-yarullin
+[18:34:16] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/kalendar
+[18:34:17] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/druzyam-i-partneram
+[18:34:18] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/stories/all/aleksandr-matveev
+[18:34:18] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/stories/all/ukradennaya-voda
+[18:34:18] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/stories/all/zerkalo
+[18:34:18] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://nikoartgallery.com/news
+[18:34:18] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/afisha/ansambl-masm-karnaval-litsa-maski
+[18:34:18] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://nikoartgallery.com/contacts
+[18:34:18] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/illyustraczii-v-valieva-k-romanu-maste
+[18:34:19] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/en/news/all/gotovitsya-izdanie-knigi-rasskazov-n-b-nikogosyana-
+[18:34:19] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/paganini-10-06-25-389
+[18:34:20] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/en/news/all/gotovitsya-izdanie-knigi-rasskazov-n-b-nikogosyana-
+[18:34:20] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/en/author
+[18:34:20] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/afisha/rem-urasin-fortepiano-motsart-shopen-yakhin-yarullin
+[18:34:20] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/afisha/muzykalnye-priklyucheniya-bibigona-po-motivam-skazki-korneya-chukovskogo
+[18:34:21] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/afisha/muzykalnye-priklyucheniya-bibigona-po-motivam-skazki-korneya-chukovskogo
+[18:34:21] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/afisha/evgeniy-starodubtsev-i-gnessin-quartet-batsevich-shopen
+[18:34:21] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/den-i-noch-teatra
+[18:34:21] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/afisha/evgeniy-starodubtsev-i-gnessin-quartet-batsevich-shopen
+[18:34:21] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/afisha/vecher-pervyy-ilya-papoyan-i-kapella-zolotoy-vek-bakh
+[18:34:22] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://nikoartgallery.com/gallery
+[18:34:22] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/labirinty-odnogo-romana
+[18:34:22] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/afisha/vecher-pervyy-ilya-papoyan-i-kapella-zolotoy-vek-bakh
+[18:34:22] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/afisha/vecher-chetvertyy-ekaterina-derzhavina-petr-laul-i-kapella-zolotoy-vek-motsart-gaydn-shubert
+[18:34:22] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/afisha/vecher-chetvertyy-ekaterina-derzhavina-petr-laul-i-kapella-zolotoy-vek-motsart-gaydn-shubert
+[18:34:22] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/afisha/varvara-myagkova-kontsert-po-zayavkam
+[18:34:24] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/nochnaya-po-sledam-avtobus-29-03-25-971-246-133
+[18:34:24] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/popechitelskij-sovet
+[18:34:25] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news/all/uchastie-v-51-antikvarnom-salone
+[18:34:26] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/en/contacts
+[18:34:26] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/vystavka-posvyashhena-125-letiyu-so-dnya-rozhd
+[18:34:26] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/afisha/varvara-myagkova-kontsert-po-zayavkam
+[18:34:26] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news/all/vystavka-maksa-birshteyna
+[18:34:26] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/ekskursiya-na-tramvae-302-bis-bulgakov-i-ego-epoha-3-3-2-5-4
+[18:34:27] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/news/all/uchastie-v-51-antikvarnom-salone
+[18:34:27] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/afisha/yana-ivanilova-soprano-svetlana-adrianova-fortepiano-vse-khochet-pet-i-slavit-boga
+[18:34:27] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/afisha/yana-ivanilova-soprano-svetlana-adrianova-fortepiano-vse-khochet-pet-i-slavit-boga
+[18:34:27] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/afisha/tatyana-grindenko-nata-pavlova-i-opus-posth-korolevskiy-kontsert-
+[18:34:28] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/gallery?PAGEN_1=2&SIZEN_1=20
+[18:34:28] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/smi-o-nas
+[18:34:29] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/news/all/vystavka-maksa-birshteyna
+[18:34:29] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news?PAGEN_1=2&SIZEN_1=12
+[18:34:29] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/nochnaya-teatralizovannaya-ekskursiya-n-2-2-3-2-3-3-2-3-2-2-321-203-783-531-208-588-897-290
+[18:34:29] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/podarochnye-sertifikaty-2
+[18:34:30] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/afisha/tatyana-grindenko-nata-pavlova-i-opus-posth-korolevskiy-kontsert-
+[18:34:30] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/afisha/ansambl-musica-tempora-chteniya-vo-tme-
+[18:34:31] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/en/arenda
+[18:34:31] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/magazin
+[18:34:31] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2024/02/15/kot-begemot-v-reklame-chudo-tovarov-s-avtomaticheskoj-kormushkoj
+[18:34:33] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/gallery?SIZEN_1=20
+[18:34:33] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://nikoartgallery.com/news/vystavki/dvuedinstvo-rudolfa-khachatryana
+[18:34:33] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/afisha/ansambl-musica-tempora-chteniya-vo-tme-
+[18:34:33] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/afisha/stanislav-malyshev-pavel-dombrovskiy-ot-betkhovena-do-postmodernizma
+[18:34:34] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/klassika-novoe-prochtenie
+[18:34:34] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/ekskursiya-na-tramvae-302-bis-bulgakov-i-ego-epoha-3-3-2-5-5-5-5-3-3-950-554-525-625-675-510-444-737-440-185-414-299-368-509-887-634
+[18:34:34] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/afisha/stanislav-malyshev-pavel-dombrovskiy-ot-betkhovena-do-postmodernizma
+[18:34:34] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/afisha/ravil-islyamov-ilya-yashin-ansambl-prometheus-vaynberg-boris-chaykovskiy-
+[18:34:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/Physis
+[18:34:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/vystavka-albiny-voronkovoy-zvuki-i-kraski-vselennoy
+[18:34:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/gagik-rushanyan-zhivopis-
+[18:34:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/maryam-aslamazyan-predchuvstvie-vesny
+[18:34:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/tatyana-faydysh-epizody
+[18:34:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/vystavka-anny-birshteyn
+[18:34:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/noch-muzeev-2023
+[18:34:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news?SIZEN_1=12
+[18:34:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/irina-starzhenetskaya-vozvrashchenie-
+[18:34:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/muntsart-zhivopis-i-grafika-andreya-muntsa
+[18:34:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/nikolay-nikogosyan-pasteli
+[18:34:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/elena-utenkova-chastitsy-bytiya-
+[18:34:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/nikolay-nikogosyan-sad-arlekina
+[18:34:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news/kontserty
+[18:34:35] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/news/vystavki/dvuedinstvo-rudolfa-khachatryana
+[18:34:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://nikoartgallery.com/arenda
+[18:34:36] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/afisha/ravil-islyamov-ilya-yashin-ansambl-prometheus-vaynberg-boris-chaykovskiy-
+[18:34:36] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/afisha/vecher-vtoroy-yakov-katsnelson-i-kapella-zolotoy-vek-motsart-shopen-
+[18:34:36] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/news/kontserty
+[18:34:36] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news/all/nikolay-nikogosyan-puteshestviya-peyzazhi-1980kh-1990kh
+[18:34:36] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2022/07/27/pyatoe-izmerenie-bulgakovskij-dom-pronzaet-vremya
+[18:34:37] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/znachok
+[18:34:38] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/en/news
+[18:34:38] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/afisha/vecher-vtoroy-yakov-katsnelson-i-kapella-zolotoy-vek-motsart-shopen-
+[18:34:38] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/en/news/all/5555
+[18:34:38] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/fotogalereya-muzej
+[18:34:39] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/romeo-i-dzhuletta-14-02-26
+[18:34:39] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/en/news/all/5555
+[18:34:39] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news/all/yuriy-grigoryan-personalnaya-vystavka
+[18:34:39] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/news/all/nikolay-nikogosyan-puteshestviya-peyzazhi-1980kh-1990kh
+[18:34:40] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news/all/andrey-dillendorf
+[18:34:40] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/news/all/yuriy-grigoryan-personalnaya-vystavka
+[18:34:41] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/category/smi-o-nas
+[18:34:41] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/news/all/andrey-dillendorf
+[18:34:41] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news/all/noch-muzeev-2025
+[18:34:41] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/product/spichki-magnit
+[18:34:41] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/product-category/uncategorized
+[18:34:41] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/vizitnicza-96sm
+[18:34:42] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/news/all/noch-muzeev-2025
+[18:34:42] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news/all/petr-bragovskiy-krasnoe-beloe
+[18:34:42] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/news/all/petr-bragovskiy-krasnoe-beloe
+[18:34:42] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news?PAGEN_1=3&SIZEN_1=12
+[18:34:43] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/en/news/all
+[18:34:43] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/en/news/vystavki
+[18:34:43] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/en/news/novosti-galerei
+[18:34:43] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/en/news/kontserty
+[18:34:43] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/en/news/all/na-baze-galerei-proydut-praktiku-studenty-vysshey-shkoly-ekonomiki
+[18:34:43] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/en/news/all/otkrylas-vystavka-armyanskikh-khudozhnikov
+[18:34:43] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/en/news/all/the-charity-concert
+[18:34:43] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/en/news/all/v-berline-otkryvaetsya-vystavka-rabot-n-b-nikogosyana
+[18:34:43] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/en/news/all/dveri-galerei-otkryvayutsya-dlya-posetiteley
+[18:34:43] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news/vystavki
+[18:34:43] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news/novosti-galerei
+[18:34:43] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/o-nas
+[18:34:44] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/news/vystavki
+[18:34:44] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news/all/dvuedinstvo-rudolfa-khachatryana
+[18:34:45] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/news/all/dvuedinstvo-rudolfa-khachatryana
+[18:34:45] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news?PAGEN_1=5&SIZEN_1=12
+[18:34:46] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/shukshin-0678-3747-460
+[18:34:47] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/noch-muzeev-2021
+[18:34:47] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/otkrytie-vystavki-podopechnykh-fonda-liga-mechty
+[18:34:47] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/vystavka-4-izmereniya
+[18:34:47] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/proekt-east-meets-west-gallery-labirint
+[18:34:47] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/tvoy-obraz-vsegda-peredo-mnoy-
+[18:34:47] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/uteryannyy-mir-bruno-shultsa
+[18:34:47] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/vystavka-domeniko-kolantoni
+[18:34:47] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/andrey-ivanov-kond
+[18:34:47] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/vaagn-gukasyan-teni-golosov
+[18:34:47] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/armeniya-mezhdu-nebom-i-zemley
+[18:34:47] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/vystavka-rabot-anatoliya-komelina-vspominaya-roditeley
+[18:34:47] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/vystavka-anatoliya-komelina-izgnanie-iz-raya
+[18:34:47] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news/all
+[18:34:47] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news/all/tri-figury-vgikovtsy-60-kh-vorobev-vulokh-parkhomenko
+[18:34:47] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/category/smi-o-nas/page/2
+[18:34:47] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2025/01/15/na-telekanale-rossiya1-v-programme-v-krugu-druzej-s-vedushhim-akterom-sergeem-druzyakom-peredacha-s-uchastiem-natali-sklyarovoj-i-nashego-lyubimogo-sotrudnika-kota-bege
+[18:34:48] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/news/novosti-galerei
+[18:34:48] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/news/all
+[18:34:48] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news?PAGEN_1=4&SIZEN_1=12
+[18:34:49] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/v-blagotvoritelnyy-kontsert-aktsiya-vstan-i-idi-v-pomoshch-detyam-s-dtsp
+[18:34:49] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/v-berline-otkryvaetsya-vystavka-rabot-n-b-nikogosyana
+[18:34:49] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/vystavka-n-b-nikogosyana-v-gyumri
+[18:34:49] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/programma-granatovye-zernyshki-v-galepee-niko
+[18:34:49] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/sedmoy-moskovskiy-inklyuzivnyy-festival-iskusstv
+[18:34:49] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/personalnaya-vystavka-n-b-nikogosyana-v-gtg-na-krymskoi-valu
+[18:34:49] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/festival-fortepiannykh-duetov
+[18:34:49] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/vystavka-zhaka-ikhmalyana-v-galeree-niko
+[18:34:49] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/blagotvoritelnyy-kontsert-fonda-obraz-zhizni
+[18:34:49] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/vruchenie-dara-russkomu-muzeyu-armenii
+[18:34:49] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/otkrylas-vystavka-armyanskikh-khudozhnikov
+[18:34:49] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/tvorcheskiy-vecher-kompozitora-sergeya-akhunova
+[18:34:49] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news/all/1960-ye-mir-nikolaya-nikogosyana-
+[18:34:49] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/news/all/tri-figury-vgikovtsy-60-kh-vorobev-vulokh-parkhomenko
+[18:34:49] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/product/magnit
+[18:34:49] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/albom-hudozhestvennyh-fotorabot-eleny-martynyuk-zazerkale-2
+[18:34:49] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/news/all/1960-ye-mir-nikolaya-nikogosyana-
+[18:34:49] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news/all/dmitriy-zhilinskiy-motivy-armenii
+[18:34:50] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/bufet-302-bis
+[18:34:50] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/news/all/dmitriy-zhilinskiy-motivy-armenii
+[18:34:50] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news/all/vystavka-niny-vatolinoy
+[18:34:51] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://nikoartgallery.com/news/all/vystavka-niny-vatolinoy
+[18:34:51] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://nikoartgallery.com/news?PAGEN_1=6&SIZEN_1=12
+[18:34:51] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/ekskursiya-na-tramvae-302-bis-bulgakov-i-ego-epoha-3-3-2-5-5-5-5-3-3-950-554-525-625-675-510-444-737-440-185-414-299-368-509-887-234
+[18:34:52] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/argentinskaya-noch-muzeev-
+[18:34:52] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/otkrytie-vystavki-rabot-viktora-lisitskogo
+[18:34:52] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/vystavka-akvareley-yuriya-libkhabera-pamyati-khudozhnika
+[18:34:52] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/vystavka-marii-vintskevich-dzhazovye-otrazheniya
+[18:34:52] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/prezentatsiya-knigi-prezentatsiya-knigi-prodolgovatye-chisla-vystavka-illyustratsiy
+[18:34:52] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/yubileynaya-vystavka-east-meets-west-gallery
+[18:34:52] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/radio-orfey-senatorskiy-klub-v-galeree-niko
+[18:34:52] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/blagotvoritelnyy-kontsert-fonda-naydi-semyu
+[18:34:52] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/vystavka-grafiki-n-nikogosyana-muzy-70-kh
+[18:34:52] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/blagotvoritelnyy-kontsert-podarki-pod-elkoy
+[18:34:52] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/feerichnoe-zakrytie-nikofest2019
+[18:34:52] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/otkrytie-vystavki-n-nikogosyan-obrazy-armenii
+[18:34:53] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2022/10/25/v-bulgakovskom-dome-gotovyat-spektakl-kvartirnik-i-neobychnuyu-ekskursiyu
+[18:34:53] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/na-baze-galerei-proydut-praktiku-studenty-vysshey-shkoly-ekonomiki
+[18:34:53] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/gotovitsya-izdanie-knigi-rasskazov-n-b-nikogosyana-
+[18:34:53] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/blagotvoritelnyy-kontsert-v-galeree-niko
+[18:34:53] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://nikoartgallery.com/news/all/dveri-galerei-otkryvayutsya-dlya-posetiteley
+[18:34:53] INFO  [s.services.crawling.CrawlingService] - Crawling finished, waiting for writer...
+[18:34:53] INFO  [s.services.page.PageBatchWriter] - Writer sees STOP signal
+[18:34:53] INFO  [s.services.page.PageBatchWriter] - PageBatchWriter finished
+[18:34:54] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/product/magnit-zakatnoj-4
+[18:34:54] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/magnit-derevyannyj-obemnyj-610-sm
+[18:34:56] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/nauchno-metodicheskij-otdel-i-ya-gorpenk
+[18:34:57] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/lection-232-253246
+[18:34:59] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2022/12/22/vechernie-vstrechi-muzej-teatr-bulgakovskij-dom
+[18:35:00] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/znachok-2
+[18:35:01] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/nauchno-metodicheskij-otdel-bulgakovskij-dom
+[18:35:03] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/literaturnaya-gostinaya-loly-zvonarevoj-3-3-3-3-2-2-512
+[18:35:04] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2023/04/10/mistika-v-zhizni-bulgakova
+[18:35:06] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/kruzhka-zapreshheno-razgovarivat-s-neizvestnymi
+[18:35:07] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/events/nauchno-metodicheskij-otdel-bulgakovskij-dom-3
+[18:35:07] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/23-fevralya
+[18:35:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/ekskursiya-po-bulgakovskomu-domu-2-2
+[18:35:10] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2023/03/31/muzej-bulgakovskij-dom-mozhno-besplatno-posetit-v-ramkah-akczii-den-bez-turniketov
+[18:35:11] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/product/magnit-zakatnoj-2
+[18:35:11] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/cart
+[18:35:13] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/spektakli
+[18:35:15] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/pro-fedota-23-11-24-241-103-681-479-363
+[18:35:16] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2022/07/19/premera-immersivnogo-spektaklya-pyatoe-izmerenie-projdet-v-muzee-teatre-bulgakovskij-dom
+[18:35:18] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/aleksandr-vertinskiy-jeltoe-tango
+[18:35:19] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/avtorskaya-statuetka-kot-begemot-bronzavysota-7-sm
+[18:35:21] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/nochnaya-teatralizovannaya-ekskursiya-18-10-866-501
+[18:35:21] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2023/12/27/v-novom-vypuske-zhurnala-serebryanyj-gorod-vyshlo-intervyu-ispolnitelnogo-direktora-muzeya-teatra-bulgakovskij-dom-natali-sklyarovoj
+[18:35:24] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/spektakl-dovlatov
+[18:35:24] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/magazin/page/2
+[18:35:27] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/literaturnaya-gostinaya-loly-zvonarevoj-3-3-3-3-3-2-343
+[18:35:27] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2024/03/18/smotrite-fragment-video-programmy-intervyu-na-telekanale-moskva-24-o-bulgakovskom-dome
+[18:35:30] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/ya-vysotsky
+[18:35:30] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/magazin/page/1
+[18:35:30] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/product/magnit-zakatnoj
+[18:35:30] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/product/magnit-zakatnoj-3
+[18:35:30] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/nabor-minimagnitov-bolshoj-107-sm
+[18:35:32] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2024/02/05/pushistyj-ekskursovod-statya-ezhenedelnika-vechernyaya-moskva
+[18:35:32] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/nochnaya-teatralizovannaya-ekskursiya-18-10-866
+[18:35:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/romeo-i-dzhuletta
+[18:35:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/albom-hudozhestvennyh-rabot-e-martynyuk-24533-sm
+[18:35:37] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2024/03/13/poseshhaemost-bulgakovskogo-doma-vyrosla-na-20-posle-vyhoda-filma-master-i-margarita
+[18:35:37] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/zhizn-zh-16556-25
+[18:35:40] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/iskushenie-paganini
+[18:35:40] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/bloknot-iz-ekokozhi-1318-sm
+[18:35:42] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2024/02/03/natalya-sklyarova-ispolnitelnyj-direktor-muzej-teatra-i-ekskursovod-aleksej-beklemyshev-v-speczialnom-reportazhe-dlya-moskva-24-pro-magiyu-bulgakovskogo-doma
+[18:35:43] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/zhizn-zh-16-01-25-286
+[18:35:44] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/leonid-utyosov-spasibo-serdcze
+[18:35:45] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/chasy-derevyannye-na-podstavke-diam-15-sm
+[18:35:46] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2022/07/25/pyatoe-izmerenie-bulgakovskij-dom-20-07-2022-fotoreportazh
+[18:35:48] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/parokhod-23-02-26
+[18:35:49] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/спектакли
+[18:35:49] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/zhizn-zh
+[18:35:50] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/zazhigalka-slajder-46-sm
+[18:35:51] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2025/05/19/muzej-teatr-bulgakovskij-dom-s-razmahom-otmetil-den-rozhdeniya-mihaila-afanasevicha-bulgakova
+[18:35:53] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/karamazovy-21-5646-25-952
+[18:35:54] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/segodnya-takaja-noch
+[18:35:56] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/mini-kopiya-primusa-bronzavysota-45-sm
+[18:35:56] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2024/01/30/v-obshhestvennoj-sluzhbe-novostej-vyshla-statya-gde-bulgakoved-gorpenko-myagkovp-oczenila-novyj-film-master-i-margarita
+[18:35:59] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/ekskursiya-na-tramvae-302-bis-bulgakov-i-ego-epoha-3-3-2-5-5-5-5-3-3-950-554-525-625-675-510-444-237-685
+[18:35:59] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/zulali
+[18:36:02] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/my-account
+[18:36:02] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/smi-o-nas/page/2
+[18:36:04] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/literaturnyj-salon-andreya-korovina-28-01-26
+[18:36:05] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/master-margarita
+[18:36:08] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/my-account/lost-password
+[18:36:08] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/znak-zapreshheno-razgovarivat-s-neizvestnymi
+[18:36:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2020/06/23/bulgakov-lyubim-po-vsej-rossii
+[18:36:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2019/10/24/my-v-top-10-samyh-romantichnyh-mest-moskv
+[18:36:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2022/06/18/festival-novoe-prochtenie-klassika-na-vse-vremena-v-muzee-teatre-bulgakovskij-dom
+[18:36:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2022/06/13/festival-novoe-prochtenie-klassika-na-vse-vremena-startuet-v-muzee-teatre-bulgakovskij-dom
+[18:36:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2020/06/02/den-zashhity-detej-v-teatrah-rossii
+[18:36:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2021/10/07/o-elene-bulgakovoj-kak-prototipe-geroini-izvestnogo-romana-rasskazali-na-amurskoj-oseni
+[18:36:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2021/05/17/1-kanal-130-let-ispolnilos-so-dnya-rozhdeniya-klassika-mirovoj-literatury-mihaila-bulgakova
+[18:36:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2022/06/07/festival-novoe-prochtenie-klassika-na-vse-vremena-startuet-v-muzee-teatre-bulgakovskij-dom-3
+[18:36:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2021/06/06/misticheskaya-vystavka-v-bulgakovskom-dome
+[18:36:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2019/10/24/syuzhet-o-teatralnoj-studii-bulgakov
+[18:36:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2021/10/12/teatr-pyati-izmerenij
+[18:36:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2020/06/04/programma-poslednij-den-o-mihaile-bulgakove
+[18:36:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2021/08/13/bulgakovskij-dom-priglasil-gorozhan-na-den-ispolneniya-zhelanij
+[18:36:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2022/07/14/bulgakovskij-dom-predstavil-novyj-format-teatralnyh-postanovok
+[18:36:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2022/06/12/festival-novoe-prochtenie-klassika-na-vse-vremena-startuet-v-muzee-teatre-bulgakovskij-dom-2
+[18:36:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2022/06/08/festival-novoe-prochtenie-klassika-na-vse-vremena-v-bulgakovskom-dome
+[18:36:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2021/05/20/iz-veka-v-vek-pereletaya-razgovor-s-volandom-i-ne-tolko-s-nim
+[18:36:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2022/08/29/v-moskve-vskryli-kapsulu-vremeni-zalozhennuyu-u-poroga-bulgakovskogo-doma-rovno-desyat-let-nazad
+[18:36:11] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/ekskursiya-na-tramvae-302-bis-bulgakov-i-ego-epoha-3-3-2-5-5-5-5-3-2
+[18:36:12] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/fedot-strelec
+[18:36:14] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/kniga-sejf-master-i-margarita
+[18:36:14] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2022/07/20/pyatoe-izmerenie-immersivnoe-puteshestvie-po-realnosti-mihaila-bulgakova
+[18:36:16] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/ekskursiya-na-tramvae-302-bis-bulgakov-i-ego-epoha-3-3-2-5-5-5-5-3-3-950-554-525-625-675-510-444-737-440-185-414-746-805-790-871
+[18:36:17] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/spektakl-teatr
+[18:36:19] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/shkatulka-sejf-master-i-margarita-1421-sm
+[18:36:20] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2022/11/21/muzej-teatr-bulgakovskij-dom-otkryvaet-vystavku-rabot-solnechnyh-detej
+[18:36:22] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/aleksandr-vertinskiy-jeltoe-tango-18-052-25-972
+[18:36:23] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/stakan-vody
+[18:36:24] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/my-account/orders
+[18:36:26] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/2023/05/25/spektakl-sobache-serdcze-preobrazhenskij-premera-ko-dnyu-rozhdeniya-m-a-bulgakova
+[18:36:27] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/averchenko-i-dvoe-drugih-0482-25-138
+[18:36:29] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/sobachie-serdce-preobrazhenskiy
+[18:36:30] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/zerkalo-karmannoe-diam-7-sm
+[18:36:33] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/o-muzee
+[18:36:33] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/spektakl-teatr-05-01-25-700-515-217-264
+[18:36:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/rukopisi-ne-goryat-festival
+[18:36:36] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/chasy-karmannye-na-czepochke-kvarczevyj-mehanizm
+[18:36:38] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/dom
+[18:36:39] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/rukopisi-154556-25-882-752
+[18:36:41] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/vdoviy-parokhod
+[18:36:42] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/magnit-derevyannyj-obemnyj-margarita-610-sm
+[18:36:44] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/о-театре
+[18:36:45] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/aleksandr-vertinskiy-jeltoe-tango-18-052-25-972-808
+[18:36:46] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/karamazovy
+[18:36:47] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/product/kniga-sejf-master-i-margarita-1421-sm
+[18:36:48] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://dombulgakova.ru/о-театре
+[18:36:48] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/о-нас
+[18:36:50] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/ekskursiya-na-tramvae-302-bis-bulgakov-i-ego-epoha-3-3-2-5-5-5-5-3-3-950-554-525-625-675-510-444-737-440-185-414-299-368-509-887-261
+[18:36:51] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/shukshin
+[18:36:52] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/о-музее
+[18:36:53] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://dombulgakova.ru/о-нас
+[18:36:53] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/podhodtsev-i-dvoe-drugih-ili-bezobrazie-imeni-kotoromu-net
+[18:36:56] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/ekskursiya-na-tramvae-302-bis-bulgakov-i-ego-epoha-3-3-2-5-5-5-5-3-3-950-554-525-625-675-510-444-737-440-185-414-299-368-509-887
+[18:36:57] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/gid
+[18:36:58] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://dombulgakova.ru/о-музее
+[18:36:58] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/mekhanika-lyubvi
+[18:37:00] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/korporativnye-predlozheniya-3
+[18:37:00] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/master-i-margarita-19-03-25-446-243-290-269
+[18:37:02] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/festivali
+[18:37:03] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/volshebnik
+[18:37:05] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/volontery
+[18:37:06] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/misticheskaya-moskva-avtobus-32-3246-342-645-634
+[18:37:08] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/afisha
+[18:37:08] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/literaturnyj-salon-andreya-korovina
+[18:37:10] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/biblioteka-bulgakovskogo-doma
+[18:37:11] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/ekskursiya-na-tramvae-302-bis-bulgakov-i-ego-epoha-3-3-2-5-5-5-5-3-3-950-554-525-625-675-510-444-737-440-185-414-978-538-478-448
+[18:37:14] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/kot-begemot
+[18:37:14] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/literaturnyj-salon-andreya-korovina
+[18:37:17] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/ekskursiya-na-tramvae-302-bis-bulgakov-i-ego-epoha-3-3-2-5-5-5-5-3-3-950-554-525-625-675-510-444
+[18:37:17] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/olimpiada
+[18:37:20] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/mec-category/lektorii-vistavky
+[18:37:21] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://dombulgakova.ru/events/literaturnyj-salon-andreya-korovina
+[18:37:21] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/bulgakovskij-almanah
+[18:37:22] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/sobachie-serdce-08-02-26
+[18:37:23] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/archives/19396
+[18:37:27] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/2026/02/05/predstavitelnaya-delegacziya-muzeya‑teatra-bulgakovskij-dom-nakonecz-priehala-s-xxvi-vserossijskogo-obuchayushhego-festivalya-poka-gorit-svecha-v-kolomne
+[18:37:27] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/kontakty
+[18:37:29] INFO  [s.crawler.engine.CrawlerTask] - Что-то пошло не так при загрузке по адресу: https://dombulgakova.ru/archives/19396
+[18:37:29] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/aktery
+[18:37:30] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/events/master-i-margarita-19-03-25-446-243-290-269-173
+[18:37:32] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/category/uncategorized
+[18:37:33] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/detskaya-teatralnaya-studiya
+[18:37:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/bulgakovskaya-encziklopediya
+[18:37:38] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2025/05/16/15-maya-my-otmetili-den-rozhdeniya-mihaila-afanasevicha-bulgakova
+[18:37:38] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2025/05/13/otkrytie-vystavki-marii-mihalkovoj-konchalovskoj-priurochennoj-ko-dnyu-rozhdeniya-mihaila-afanasevicha-bulgakova
+[18:37:38] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/category/uncategorized/page/2
+[18:37:38] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2025/06/02/1-iyunya-sostoyalos-torzhestvennoe-otkrytie-detskogo-lagerya-letnyaya-teatralnaya-laboratoriya-mir-bulgakova
+[18:37:38] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/biblionoch
+[18:37:39] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/speczpredlozheniya
+[18:37:40] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/excursii
+[18:37:41] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/pomogi-muzeyu-i-muzej-pomozhet-tebe
+[18:37:43] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/fotostudiya-eleny-martynyuk
+[18:37:44] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/obzornaya-excursiya
+[18:37:46] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/page/2
+[18:37:46] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/shizofreniya
+[18:37:47] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/fotogalereya-teatr
+[18:37:48] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/history
+[18:37:51] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/page/3
+[18:37:51] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/dnevnaya-po-sledam-romana
+[18:37:53] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/gastroli
+[18:37:54] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/checkout
+[18:37:57] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/dnevnaya-po-sledam-romana-2
+[18:37:57] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/v-chas-nebyvalo
+[18:37:57] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2025/10/07/priglashaem-vas-7-oktyabrya-v-19-00-na-lekcziyu-transportnye-priklyucheniya-v-romane-master-i-margarita-v-ramkah-proekta-bulgakovskij-mir
+[18:37:57] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2025/10/04/segodnya-vsemirnyj-den-zashhity-zhivotnyh
+[18:37:57] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/page/4
+[18:37:57] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=3 url=https://dombulgakova.ru/2025/10/15/v-muzee-teatre-bulgakovskij-dom-sovmesto-s-zhurnalom-moskva-life-styile-sostoyalos-otkrytie-vystavki-fotorazmyshleniya-na-temu-tvorchestva-m-a-bulgakova
+[18:37:57] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/2026/01/28/otmena-spektaklya-rukopisi-ne-goryat
+[18:38:00] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/mec-category/ekskursii
+[18:38:03] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/moskovskie-istorii-maslenica
+[18:38:04] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/pravila-poseshheniya
+[18:38:05] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/noch-muzeev
+[18:38:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/nochnaya-po-sledam-romana
+[18:38:09] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/voprosy-i-otvety-3
+[18:38:11] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/2025/11/27/vchera-v-teatre-im-m-a-bulgakova-otmechali-20-let-literaturnomu-salonu-andreya-korovina-v-bulgakovskom-dome
+[18:38:12] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/literaturnaya-gostinaya-loly-zvonarev
+[18:38:14] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/buldom-nekhoroshaya-avtobus
+[18:38:15] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/2026/02/09/vchera-sostoyalas-nasha-voskresnaya-teatralnaya-laboratoriya-dlya-detej-uchastnikov-svo-i-detej-iz-mnogodetnyh-semej-teatr-eto-my
+[18:38:17] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/mec-category/spektakly
+[18:38:17] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/den-ispolneniya-zhelanij
+[18:38:20] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/nivigidnyaya-moskva-ili
+[18:38:20] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/otzyvy
+[18:38:23] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/2026/02/02/v-muzee-teatre-bulgakovskij-dom-startovala-teatralnaya-laboratoriya-dlya-detej-uchastnikov-svo-i-detej-iz-mnogodetnyh-semej-teatr-eto-my
+[18:38:24] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/suvenirnaya-lavka
+[18:38:26] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/302-bis-bulgakov-i-ego-epoha
+[18:38:27] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/14-fevralya
+[18:38:29] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=1 url=https://dombulgakova.ru/o-teatre
+[18:38:31] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/spiriticheskiy-seans
+[18:38:32] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/po-trope-ispolneniya-zhelaniy
+[18:38:33] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/nochnaya-misticheskaya-moskva
+[18:38:35] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/istorii-lyubvi
+[18:38:36] INFO  [s.crawler.engine.CrawlerTask] - CRAWL START depth=2 url=https://dombulgakova.ru/niviy-god-i-bryzgi
+[18:38:42] INFO  [s.services.crawling.CrawlingService] - Crawling finished, waiting for writer...
+[18:39:12] INFO  [s.services.indexing.IndexingService] - All sites indexed. Indexing finished.
+[18:41:07] INFO  [s.services.page.PageBatchWriter] - Writer sees STOP signal
+[18:41:19] INFO  [s.services.page.PageBatchWriter] - PageBatchWriter finished

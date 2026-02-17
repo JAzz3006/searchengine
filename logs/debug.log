@@ -1,0 +1,11 @@
+[18:30:20] DEBUG [searchengine.Application] - Running with Spring Boot v2.7.1, Spring v5.3.21
+[18:30:34] DEBUG [s.config.StartupInitializer] - Директория C:\Users\Cybermart\IdeaProjects\searchengine\logs существует
+[18:30:34] DEBUG [s.config.StartupInitializer] - Директория C:\Users\Cybermart\IdeaProjects\searchengine\output существует
+[18:33:56] DEBUG [s.crawler.robots.RobotsTxtLoader] - Файл C:\Users\Cybermart\IdeaProjects\searchengine\output\nikoartgallery.com-robots.txt уже существует
+[18:33:56] DEBUG [s.crawler.robots.RobotsTxtLoader] - Файл C:\Users\Cybermart\IdeaProjects\searchengine\output\dombulgakova.ru-robots.txt уже существует
+[18:34:33] DEBUG [s.services.page.PageBatchWriter] - Duplicate page skipped: /gallery
+[18:34:35] DEBUG [s.services.page.PageBatchWriter] - Duplicate page skipped: /news
+[18:34:47] DEBUG [s.services.page.PageBatchWriter] - Duplicate page skipped: /news
+[18:34:49] DEBUG [s.services.page.PageBatchWriter] - Duplicate page skipped: /news
+[18:34:52] DEBUG [s.services.page.PageBatchWriter] - Duplicate page skipped: /news
+[18:34:53] DEBUG [s.services.page.PageBatchWriter] - Duplicate page skipped: /news
