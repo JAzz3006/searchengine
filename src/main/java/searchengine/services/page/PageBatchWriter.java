@@ -13,7 +13,6 @@ import searchengine.repositories.PageLemmaRepository;
 import searchengine.repositories.PageRepository;
 import searchengine.services.lemma.LemmaService;
 import searchengine.util.html.HtmlTextExtractor;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -24,7 +23,6 @@ public class PageBatchWriter implements Runnable{
     private final CrawlContext context;
     private final PageRepository pageRepository;
     private final BatchConfig batchConfig;
-    //private final PageContentExtractor extractor;
     private  final LemmaService lemmaService;
     private final LemmaRepository lemmaRepository;
     private final PageLemmaRepository pageLemmaRepository;

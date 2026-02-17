@@ -8,6 +8,7 @@ import searchengine.config.SiteConfig;
 import searchengine.config.SitesList;
 import searchengine.crawler.htmlfetcher.LoadedPage;
 import searchengine.crawler.htmlfetcher.PageLoader;
+import searchengine.crawler.utils.Normalizer;
 import searchengine.crawler.utils.SameHost;
 import searchengine.model.Page;
 import searchengine.model.Site;
@@ -19,7 +20,6 @@ import searchengine.services.page.PageService;
 import searchengine.services.site.SiteService;
 import searchengine.util.html.HtmlTextExtractor;
 import searchengine.util.url.UrlNormalizer;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -40,7 +40,6 @@ public class IndexingService {
     private final PageService pageService;
     private final CrawlingService crawlingService;
     private final PageLoader pageloader;
-    //private final PageContentExtractor extractor;
     private final LemmaService lemmaService;
     private final PageIndexingService pageIndexingService;
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
@@ -97,7 +96,7 @@ public class IndexingService {
 
     @Transactional
     public void indexPage(String apiUrl) {
-        String normalisedApiUrl = UrlNormalizer.ensureScheme(apiUrl);
+        String normalisedApiUrl = Normalizer.normalise(UrlNormalizer.ensureScheme(apiUrl));
         try{
             URI apiUri = new URI(normalisedApiUrl);
             if (apiUri.getScheme() == null) {
@@ -107,17 +106,20 @@ public class IndexingService {
                 throw new IllegalArgumentException("Page address " + normalisedApiUrl + " must contain host");
             }
 
-            String apiSiteUrl = apiUri.getScheme() + "://" + apiUri.getHost();
+            String apiSiteUrl = UrlNormalizer.normalizeSiteUrl(
+                    apiUri.getScheme() + "://" + apiUri.getHost()
+            );
             SiteConfig siteConfig = sitesList.getSites().stream()
-                    .filter(config -> SameHost.sameHost(apiSiteUrl, config.getUrl()))
+                    .filter(config -> SameHost.sameHost(apiSiteUrl, UrlNormalizer.normalizeSiteUrl(config.getUrl())))
                     .findFirst()
                     .orElseThrow(() ->
                             new IllegalArgumentException("Page address " + normalisedApiUrl + " is from unknown site")
                     );
 
-            List<Site> sites = siteService.getSiteByUrl(siteConfig.getUrl());
+            String siteUrlNormalized = UrlNormalizer.normalizeSiteUrl(siteConfig.getUrl());
+            List<Site> sites = siteService.getSiteByUrl(siteUrlNormalized);
             Site site = sites.isEmpty()
-                    ? siteService.createSiteForPageIndexing(siteConfig.getUrl(), siteConfig.getName())
+                    ? siteService.createSiteForPageIndexing(siteUrlNormalized, siteConfig.getName())
                     : sites.get(0);
 
             String path = apiUri.getPath();

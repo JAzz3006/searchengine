@@ -14,15 +14,14 @@ import searchengine.repositories.PageRepository;
 import searchengine.repositories.SiteRepository;
 import searchengine.services.lemma.LemmaService;
 import searchengine.util.html.HtmlParserUtils;
-import searchengine.util.html.HtmlTextExtractor;
 import searchengine.util.url.UrlNormalizer;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class RequestService {
-    private static final Logger log = LoggerFactory.getLogger(RequestService.class);
+public class SearchService {
+    private static final Logger log = LoggerFactory.getLogger(SearchService.class);
     private final LemmaService lemmaService;
     private final PageRepository pageRepository;
     private final SiteRepository siteRepository;
@@ -31,9 +30,7 @@ public class RequestService {
     private final SitesList sitesList;
     private final SnippetBuilder snippetBuilder;
 
-    //TODO: посмотреть в итоге какие методы оставить public, а какие перевести private
-
-    public List<SearchResultItem> startSearch(String req, int offset, int limit, String siteUrl){
+    public List<SearchResultItem> startSearch(String req, String siteUrl){
             List<SearchResultItem> resultItems = new ArrayList<>();
             if (siteUrl == null || siteUrl.isBlank()){
                 for (SiteConfig siteConfig : sitesList.getSites()){
@@ -46,6 +43,9 @@ public class RequestService {
             }else{
                 resultItems.addAll(searchIfSiteExists(siteUrl,req));
             }
+            resultItems.sort(Comparator.comparing(SearchResultItem::getRelevance)
+                    .reversed()
+                    .thenComparing(Comparator.comparing(SearchResultItem::getUri)));
             return resultItems;
     }
 
@@ -59,8 +59,7 @@ public class RequestService {
         return searchSite(site, req);
     }
 
-    public List<SearchResultItem> searchSite(Site site, String req){
-
+    private List<SearchResultItem> searchSite(Site site, String req){
         List<SearchResultItem> results = new ArrayList<>();
 
         int pagesCount = pageRepository.countBySite(site);
@@ -68,21 +67,12 @@ public class RequestService {
 
         Set<String> requestLemmas = requestToLemmas(req);
         if (requestLemmas.isEmpty()) return List.of();
-
         List<Lemma> lemmasOfRequest = lemmaRepository
                 .findAllByLemmaInAndSite(requestLemmas, site);
 
         excludedLemmasVoice(lemmasOfRequest, requestLemmas, site);
 
-        Iterator<Lemma> lemmaIterator = lemmasOfRequest.iterator();
-        while (lemmaIterator.hasNext()){
-            Lemma l = lemmaIterator.next();
-            float ratio = (float) l.getFrequency() / pagesCount;
-            if (ratio > (SearchConfig.MAX_ALLOWED_LEMMA_FREQUENCY_RATIO)){
-                log.warn("Лемма {} исключена из поиска из-за превышения маскимальной частоты", l.getLemma() );
-                lemmaIterator.remove();
-            }
-        }
+        excludeTooFrequentLemmas(lemmasOfRequest, pagesCount);
 
         if (lemmasOfRequest.isEmpty()) return List.of();
 
@@ -97,11 +87,11 @@ public class RequestService {
             item.setSite(site.getUrl());
             item.setSiteName(site.getName());
             item.setUri(page.getPath());
-            item.setRelevance(pageAbsRelevance.get(page.getId()));
+            item.setRelevance(pageAbsRelevance.getOrDefault(page.getId(), 0f));
             item.setSnippet(snippetBuilder.buildSnippet(page, lemmasOfRequest));
             item.setTitle(HtmlParserUtils.extractTitle(page.getContent()));
+            results.add(item);
         }
-
         return results;
     }
 
@@ -126,12 +116,24 @@ public class RequestService {
                 maxRAbs = newValue;
             }
         }
-        if (pairs.isEmpty()) return Map.of();
+        if (pairs.isEmpty() || maxRAbs == 0f) return Map.of();
 
         for (Map.Entry<Long, Float> entry : abs.entrySet()){
             entry.setValue(entry.getValue() / maxRAbs);
         }
         return abs;
+    }
+
+    private void excludeTooFrequentLemmas(List<Lemma> lemmasOfRequest, int pagesCount){
+        Iterator<Lemma> lemmaIterator = lemmasOfRequest.iterator();
+        while (lemmaIterator.hasNext()){
+            Lemma l = lemmaIterator.next();
+            float ratio = (float) l.getFrequency() / pagesCount;
+            if (ratio > (SearchConfig.MAX_ALLOWED_LEMMA_FREQUENCY_RATIO)){
+                log.warn("Лемма {} исключена из поиска из-за превышения маскимальной частоты", l.getLemma() );
+                lemmaIterator.remove();
+            }
+        }
     }
 
     private Set<Page> getResultPagesSet(List<Lemma> lemmasOfRequest){
@@ -163,13 +165,10 @@ public class RequestService {
                 ));
     }
 
-    public Set<String> requestToLemmas(String req){
+    private Set<String> requestToLemmas(String req){
         if (req == null || req.isBlank()){
             return Collections.emptySet();
         }
         return lemmaService.collectLemmas(req).keySet();
     }
-
-
-
 }

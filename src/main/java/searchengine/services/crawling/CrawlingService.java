@@ -35,7 +35,6 @@ public class CrawlingService {
     private final PageRepository pageRepository;
     private final PageLoader pageLoader;
     private final BatchConfig batchConfig;
-    //private final PageContentExtractor extractor;
     private final LemmaService lemmaService;
     private final LemmaRepository lemmaRepository;
     private final PageLemmaRepository pageLemmaRepository;
@@ -56,14 +55,6 @@ public class CrawlingService {
             activeContexts.add(context);
 
             String mainUrlNormalised = Normalizer.normalise(site.getUrl());
-//        String mainUrlNormalised = Stream.of(site.getUrl())
-//                .map(String::trim)
-//                .map(Repairer::repair)
-//                .filter(Objects::nonNull)
-//                .map(Normalizer::normalise)
-//                .filter(BinaryFilter::isNotBinary)
-//                .findFirst()
-//                .orElse(null);
 
             if (mainUrlNormalised == null) {
                 log.warn("Root URL rejected after normalization: {}", site.getUrl());
