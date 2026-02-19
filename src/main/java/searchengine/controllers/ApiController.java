@@ -1,12 +1,12 @@
 package searchengine.controllers;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import searchengine.config.SearchConfig;
 import searchengine.dto.response.ApiResponse;
 import searchengine.dto.response.SearchResponse;
 import searchengine.dto.response.SearchResultItem;
 import searchengine.dto.statistics.StatisticsResponse;
+import searchengine.exception.BadRequestException;
 import searchengine.services.indexing.IndexingService;
 import searchengine.services.search.SearchService;
 import searchengine.services.statistics.StatisticsService;
@@ -24,92 +24,55 @@ public class ApiController {
 
 
     @GetMapping("/statistics")
-    public ResponseEntity<StatisticsResponse> statistics() {
-        return ResponseEntity.ok(statisticsService.getStatistics());
+    public StatisticsResponse statistics() {
+        return statisticsService.getStatistics();
     }
 
     @GetMapping("/startIndexing")
-    public ResponseEntity<ApiResponse> startIndexing(){
-        return indexingService.startIndexing() ?
-                ResponseEntity.ok(ApiResponse.ok()) :
-                ResponseEntity.badRequest().body(ApiResponse.error("Индексация уже запущена"));
+    public ApiResponse startIndexing(){
+        if (!indexingService.startIndexing()){
+            throw new BadRequestException("Индексация уже запущена");
+        }
+        return ApiResponse.ok();
     }
 
     @GetMapping("/stopIndexing")
-    public ResponseEntity<ApiResponse> stopIndexing(){
-        return indexingService.stopIndexing() ?
-                ResponseEntity.ok(ApiResponse.ok()) :
-                ResponseEntity.badRequest().body(ApiResponse.error("Индексация не запущена"));
+    public ApiResponse stopIndexing(){
+        if (!indexingService.stopIndexing()){
+            throw new BadRequestException("Индексация не запущена");
+        }
+        return ApiResponse.ok();
     }
 
     @PostMapping("/indexPage")
-    public ResponseEntity<ApiResponse> startPageIndexing(@RequestParam String url){
-        try {
+    public ApiResponse startPageIndexing(@RequestParam String url){
             indexingService.indexPage(url);
-            return ResponseEntity
-                    .ok(ApiResponse.ok());
-        }catch (IllegalArgumentException e){
-            return ResponseEntity
-                    .badRequest()
-                    .body(ApiResponse.error("Данная страница находится за пределами сайтов, указанных в конфигурационном файле"));
-        }catch (IllegalStateException e){
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(ApiResponse.error("Данная страница недоступна"));
-        }catch (Exception e){
-            return ResponseEntity
-                    .internalServerError()
-                    .body(ApiResponse.error("Внутренняя ошибка"));
-        }
+            return ApiResponse.ok();
     }
+
     @GetMapping("/search")
-    public ResponseEntity<SearchResponse> search (
+    public SearchResponse search (
             @RequestParam String query,
             @RequestParam (defaultValue = "0") int offset,
             @RequestParam (defaultValue = "20") int limit,
             @RequestParam (required = false) String site){
         if (query == null || query.isBlank()){
-            return ResponseEntity
-                    .badRequest()
-                    .body(SearchResponse.error("Отсутствует поисковый запрос"));
+            throw new BadRequestException("Отсутствует поисковый запрос");
         }
         if (offset < 0){
-            return ResponseEntity
-                    .badRequest()
-                    .body(SearchResponse.error("Отрицательный offset"));
+            throw new BadRequestException("Отрицательный offset");
         }
         if (limit <= 0 ){
-            return ResponseEntity
-                    .badRequest()
-                    .body(SearchResponse.error("Лимит должен быть больше 0"));
+            throw new BadRequestException("Лимит должен быть больше 0");
         }
-        if (limit > 100 ){
-            limit = 100;
-        }
+        limit = Math.min(limit, SearchConfig.MAX_LIMIT);
 
-        try{
             List<SearchResultItem> allResults = searchService.startSearch(query, site);
             int totalCount = allResults.size();
 
-            int from = Math.min(totalCount, offset);
+            int from = Math.min(offset, totalCount);
             int to = Math.min(from + limit, totalCount);
             List<SearchResultItem> paged = new ArrayList<>(allResults.subList(from, to));
-
-
-            return ResponseEntity
-                    .ok(SearchResponse.success(totalCount, paged));
-        }catch(IllegalArgumentException e){
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(SearchResponse.error(e.getMessage()));
-        }catch (IllegalStateException e){
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(SearchResponse.error(e.getMessage()));
-        }catch (Exception e){
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(SearchResponse.error("Ошибка выполнения поиска"));
-        }
+            return SearchResponse.success(totalCount, paged);
     }
 }

@@ -3,13 +3,17 @@ server:
 
 spring:
   datasource:
-    username: root
+    url: jdbc:postgresql://localhost:5432/search_engine
+    driver-class-name: org.postgresql.Driver
+    username: postgres
     password: lovealmighty
-    url: jdbc:mysql://localhost:3306/search_engine?serverTimezone=UTC
+    #username: root
+    #password: lovealmighty
+    #url: jdbc:mysql://localhost:3306/search_engine?serverTimezone=UTC
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate
     show-sql: false

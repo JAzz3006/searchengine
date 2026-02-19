@@ -17,7 +17,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="status_time" type="DATETIME">
+            <column name="status_time" type="TIMESTAMP WITHOUT TIME ZONE">
                 <constraints nullable="false"/>
             </column>
 
@@ -61,7 +61,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="content" type="MEDIUMTEXT">
+            <column name="content" type="TEXT">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -137,7 +137,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="rank_value" type="FLOAT">
+            <column name="rank_value" type="REAL">
                 <constraints nullable="false"/>
             </column>
         </createTable>
